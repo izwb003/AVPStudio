@@ -43,12 +43,9 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-# Link Qt libraries
-target_link_libraries(AVPStudio PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
 # MacOS settings for Qt < 6.1.0 (For Qt > 6.1.0 this is configured automatically)
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.AVPStudio)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER tech.izwb.AVPStudio)
 endif()
 
 # Modify Qt executable properties
@@ -62,6 +59,25 @@ set_target_properties(AVPStudio PROPERTIES
 
 # GNU include
 include(GNUInstallDirs)
+
+# Link ffmpeg
+if(WIN32)
+    set(FFMPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg)
+endif(WIN32)
+
+find_library(LIBAVUTIL_PATH libavutil ${FFMPEG_PATH}/lib)
+find_library(LIBAVCODEC_PATH libavcodec ${FFMPEG_PATH}/lib)
+find_library(LIBAVFILTER_PATH libavfilter ${FFMPEG_PATH}/lib)
+
+include_directories(${FFMPEG_PATH}/include)
+
+# Link libraries
+target_link_libraries(AVPStudio PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    ${LIBAVUTIL_PATH}
+    ${LIBAVCODEC_PATH}
+    ${LIBAVFILTER_PATH}
+)
 
 # Set install rules
 install(TARGETS AVPStudio
