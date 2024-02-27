@@ -1,0 +1,35 @@
+QWidget {
+    background-color: #1b1b1b
+}
+
+QLabel {
+    color: white
+}
+
+QGroupBox {
+    color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 5px
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+
+QRadioButton {
+    color: white
+}
+
+QPushButton {
+    color: white;
+    background-color: grey;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px
+}
+
+QPushButton::hover {
+    background-color: lightgrey
+}

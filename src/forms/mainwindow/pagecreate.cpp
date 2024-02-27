@@ -15,40 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
-
-#include "pagewelcome.h"
 #include "pagecreate.h"
+#include "ui_pagecreate.h"
 
-#include "settings.h"
-
-#include <QDebug>
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+PageCreate::PageCreate(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::PageCreate)
 {
     ui->setupUi(this);
-    this->setWindowTitle("AVPStudio - Welcome");
-
-    PageWelcome *pageWelcome = new PageWelcome;
-    ui->stackedWidget->addWidget(pageWelcome);
-    PageCreate *pageCreate = new PageCreate;
-    ui->stackedWidget->addWidget(pageCreate);
-    ui->stackedWidget->setCurrentIndex(0);
-
-    connect(pageWelcome, SIGNAL(createContent()), this, SLOT(do_createContent()));
 }
 
-MainWindow::~MainWindow()
+PageCreate::~PageCreate()
 {
     delete ui;
-}
-
-void MainWindow::do_createContent()
-{
-    this->setWindowTitle("AVPStudio - Create (" + settings.getSizeString() + ")");
-    ui->stackedWidget->setCurrentIndex(1);
 }

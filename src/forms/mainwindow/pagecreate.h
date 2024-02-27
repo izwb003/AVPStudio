@@ -15,30 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef PAGECREATE_H
+#define PAGECREATE_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QWidget>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class PageCreate;
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class PageCreate : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit PageCreate(QWidget *parent = nullptr);
+    ~PageCreate();
 
 private:
-    Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
+    Ui::PageCreate *ui;
 };
-#endif // MAINWINDOW_H
+
+#endif // PAGECREATE_H

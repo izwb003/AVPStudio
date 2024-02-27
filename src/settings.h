@@ -15,30 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QString>
 
-#include <QMainWindow>
+namespace AVP {
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-private:
-    Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
+enum AVPSize {
+    kAVPSmallSize,
+    kAVPMediumSize,
+    kAVPLargeSize
 };
-#endif // MAINWINDOW_H
+
+class AVPSettings {
+public:
+    AVPSize size = kAVPMediumSize;
+    QString getSizeString();
+};
+}
+
+extern AVP::AVPSettings settings;
+
+#endif // SETTINGS_H

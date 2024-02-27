@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/icon256.ico</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>styles/mainstyle.qss</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/AVP_Large.jpg</file>
+        <file>images/AVP_Medium.jpg</file>
+        <file>images/AVP_Small.jpg</file>
+    </qresource>
+</RCC>

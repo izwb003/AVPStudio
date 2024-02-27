@@ -15,30 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef PAGEWELCOME_H
+#define PAGEWELCOME_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QWidget>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class PageWelcome;
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class PageWelcome : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit PageWelcome(QWidget *parent = nullptr);
+    ~PageWelcome();
 
-private:
-    Ui::MainWindow *ui;
+signals:
+    void createContent();
 
 private slots:
-    void do_createContent();
+    void on_pushButtonExit_clicked();
+
+    void on_radioButtonSmall_clicked(bool checked);
+
+    void on_radioButtonMedium_clicked(bool checked);
+
+    void on_radioButtonLarge_clicked(bool checked);
+
+    void on_pushButtonNext_clicked();
+
+private:
+    Ui::PageWelcome *ui;
 };
-#endif // MAINWINDOW_H
+
+#endif // PAGEWELCOME_H

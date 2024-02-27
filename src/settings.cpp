@@ -16,29 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "settings.h"
 
-#include <QMainWindow>
+AVP::AVPSettings settings;
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
+QString AVP::AVPSettings::getSizeString()
 {
-    Q_OBJECT
-
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-private:
-    Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
-};
-#endif // MAINWINDOW_H
+    if(this->size == kAVPSmallSize)
+        return "Small";
+    else if(this->size == kAVPMediumSize)
+        return "Medium";
+    else if(this->size == kAVPLargeSize)
+        return "Large";
+    return "";
+}

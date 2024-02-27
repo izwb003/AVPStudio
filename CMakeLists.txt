@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(AVPStudio VERSION 0.1 LANGUAGES CXX)
+project(AVPStudio VERSION 0.1.0 LANGUAGES CXX)
 
 # Necessary Qt settings
 set(CMAKE_AUTOUIC ON)
@@ -25,8 +25,22 @@ file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*)
 set(PROJECT_SOURCES
         ${SOURCES}
         ${TS_FILES}
+        res/resources.qrc
 )
 
+if(WIN32)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/res/resources_win.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/res/resources_win.rc
+        @ONLY
+    )
+    list(APPEND
+        PROJECT_SOURCES
+        ${CMAKE_CURRENT_BINARY_DIR}/res/resources_win.rc
+    )
+endif(WIN32)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${FORMS_DIRECTORY})
 
 # Set Qt executables
@@ -65,9 +79,9 @@ if(WIN32)
     set(FFMPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg)
 endif(WIN32)
 
-find_library(LIBAVUTIL_PATH libavutil ${FFMPEG_PATH}/lib)
-find_library(LIBAVCODEC_PATH libavcodec ${FFMPEG_PATH}/lib)
-find_library(LIBAVFILTER_PATH libavfilter ${FFMPEG_PATH}/lib)
+find_library(LIBAVUTIL_PATH avutil ${FFMPEG_PATH}/lib)
+find_library(LIBAVCODEC_PATH avcodec ${FFMPEG_PATH}/lib)
+find_library(LIBAVFILTER_PATH avfilter ${FFMPEG_PATH}/lib)
 
 include_directories(${FFMPEG_PATH}/include)
 
