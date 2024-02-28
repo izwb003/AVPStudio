@@ -6,6 +6,16 @@ QLabel {
     color: white
 }
 
+QMenuBar, QMenu {
+    background-color: white
+}
+
+QMenu::item:selected {
+    color: black;
+    background-color: lightgrey;
+    border-radius: 2px;
+}
+
 QGroupBox {
     color: white;
     border: 1px solid grey;

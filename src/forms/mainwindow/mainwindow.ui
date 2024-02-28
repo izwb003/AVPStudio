@@ -33,7 +33,34 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件(&amp;F)</string>
+    </property>
+    <addaction name="actionNewContent"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助(&amp;H)</string>
+    </property>
+    <addaction name="action_AVPStudio"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
+  <action name="actionNewContent">
+   <property name="text">
+    <string>新建播放内容</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_AVPStudio">
+   <property name="text">
+    <string>关于AVPStudio...</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../res/resources.qrc"/>

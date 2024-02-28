@@ -22,11 +22,42 @@ AVP::AVPSettings settings;
 
 QString AVP::AVPSettings::getSizeString()
 {
-    if(this->size == kAVPSmallSize)
+    switch(this->size) {
+    case kAVPSmallSize:
         return "Small";
-    else if(this->size == kAVPMediumSize)
+    case kAVPMediumSize:
         return "Medium";
-    else if(this->size == kAVPLargeSize)
+    case kAVPLargeSize:
         return "Large";
-    return "";
+    default:
+        return "";
+    }
+}
+
+QString AVP::AVPSettings::getSizeResolution()
+{
+    switch(this->size) {
+    case kAVPSmallSize:
+        return "2830x1080";
+    case kAVPMediumSize:
+        return "4633x1080";
+    case kAVPLargeSize:
+        return "6167x1080";
+    default:
+        return "";
+    }
+}
+
+QString AVP::AVPSettings::getRealSize()
+{
+    switch(this->size) {
+    case kAVPSmallSize:
+        return "5.5Mx2.1M";
+    case kAVPMediumSize:
+        return "9Mx2.1M";
+    case kAVPLargeSize:
+        return "12Mx2.1M";
+    default:
+        return "";
+    }
 }

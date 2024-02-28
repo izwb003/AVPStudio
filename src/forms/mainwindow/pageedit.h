@@ -15,43 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef PAGECREATE_H
-#define PAGECREATE_H
+#ifndef PAGEEDIT_H
+#define PAGEEDIT_H
 
 #include <QWidget>
-#include <QDragEnterEvent>
-#include <QDragLeaveEvent>
-#include <QDropEvent>
 
 namespace Ui {
-class PageCreate;
+class PageEdit;
 }
 
-class PageCreate : public QWidget
+class PageEdit : public QWidget
 {
     Q_OBJECT
 
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void dropEvent(QDropEvent *event);
-
 public:
-    explicit PageCreate(QWidget *parent = nullptr);
-    ~PageCreate();
-
-signals:
-    void editContent();
-
-private slots:
-    void do_init();
-
-    void on_labelDragText_linkActivated(const QString &link);
+    explicit PageEdit(QWidget *parent = nullptr);
+    ~PageEdit();
 
 private:
-    Ui::PageCreate *ui;
-
-    void rewriteLabelDragText();
+    Ui::PageEdit *ui;
 };
 
-#endif // PAGECREATE_H
+#endif // PAGEEDIT_H

@@ -21,6 +21,7 @@
 
 #include "pagewelcome.h"
 #include "pagecreate.h"
+#include "pageedit.h"
 
 #include "settings.h"
 
@@ -37,9 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(pageWelcome);
     PageCreate *pageCreate = new PageCreate;
     ui->stackedWidget->addWidget(pageCreate);
+    PageEdit *pageEdit = new PageEdit;
+    ui->stackedWidget->addWidget(pageEdit);
     ui->stackedWidget->setCurrentIndex(0);
 
     connect(pageWelcome, SIGNAL(createContent()), this, SLOT(do_createContent()));
+    connect(pageWelcome, SIGNAL(createContent()), pageCreate, SLOT(do_init()));
+    connect(pageCreate, SIGNAL(editContent()), this, SLOT(do_editContent()));
 }
 
 MainWindow::~MainWindow()
@@ -51,4 +56,9 @@ void MainWindow::do_createContent()
 {
     this->setWindowTitle("AVPStudio - Create (" + settings.getSizeString() + ")");
     ui->stackedWidget->setCurrentIndex(1);
+}
+
+void MainWindow::do_editContent()
+{
+    ui->stackedWidget->setCurrentIndex(2);
 }

@@ -40,5 +40,7 @@ private:
 
 private slots:
     void do_createContent();
+
+    void do_editContent();
 };
 #endif // MAINWINDOW_H

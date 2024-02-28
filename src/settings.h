@@ -32,6 +32,10 @@ class AVPSettings {
 public:
     AVPSize size = kAVPMediumSize;
     QString getSizeString();
+    QString getSizeResolution();
+    QString getRealSize();
+
+    QString inputVideoPath;
 };
 }
 

@@ -40,28 +40,28 @@ void PageWelcome::on_pushButtonExit_clicked()
 
 void PageWelcome::on_radioButtonSmall_clicked(bool checked)
 {
-    ui->labelInfo->setText(tr("当前设定：走廊尺寸：SMALL / 实际大小：5.5Mx2.1M / 画面分辨率：2830x1080"));
     QPixmap pixSmall(":/images/images/AVP_Small.jpg");
     ui->labelPreview->setPixmap(pixSmall);
     settings.size = AVP::kAVPSmallSize;
+    ui->labelInfo->setText(tr("当前设定：走廊尺寸：") + settings.getSizeString() + tr(" / 实际大小：") + settings.getRealSize() + tr(" / 画面分辨率：") + settings.getSizeResolution());
 }
 
 
 void PageWelcome::on_radioButtonMedium_clicked(bool checked)
 {
-    ui->labelInfo->setText(tr("当前设定：走廊尺寸：MEDIUM / 实际大小：9Mx2.1M / 画面分辨率：4633x1080"));
     QPixmap pixMedium(":/images/images/AVP_Medium.jpg");
     ui->labelPreview->setPixmap(pixMedium);
     settings.size = AVP::kAVPMediumSize;
+    ui->labelInfo->setText(tr("当前设定：走廊尺寸：") + settings.getSizeString() + tr(" / 实际大小：") + settings.getRealSize() + tr(" / 画面分辨率：") + settings.getSizeResolution());
 }
 
 
 void PageWelcome::on_radioButtonLarge_clicked(bool checked)
 {
-    ui->labelInfo->setText(tr("当前设定：走廊尺寸：LARGE / 实际大小：12Mx2.1M / 画面分辨率：6167x1080"));
     QPixmap pixLarge(":/images/images/AVP_Large.jpg");
     ui->labelPreview->setPixmap(pixLarge);
     settings.size = AVP::kAVPLargeSize;
+    ui->labelInfo->setText(tr("当前设定：走廊尺寸：") + settings.getSizeString() + tr(" / 实际大小：") + settings.getRealSize() + tr(" / 画面分辨率：") + settings.getSizeResolution());
 }
 
 
