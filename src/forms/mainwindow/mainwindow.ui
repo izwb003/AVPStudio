@@ -38,6 +38,8 @@
      <string>文件(&amp;F)</string>
     </property>
     <addaction name="actionNewContent"/>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -45,7 +47,13 @@
     </property>
     <addaction name="action_AVPStudio"/>
    </widget>
+   <widget class="QMenu" name="menu_T">
+    <property name="title">
+     <string>工具(&amp;T)</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menu_T"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNewContent">
@@ -59,6 +67,14 @@
   <action name="action_AVPStudio">
    <property name="text">
     <string>关于AVPStudio...</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F4</string>
    </property>
   </action>
  </widget>

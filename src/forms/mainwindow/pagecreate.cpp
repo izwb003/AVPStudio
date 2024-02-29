@@ -64,6 +64,7 @@ void PageCreate::dropEvent(QDropEvent *event)
             if(fileInfo.isFile())
             {
                 settings.inputVideoPath = fileName;
+                settings.inputVideoInfo = fileInfo;
                 emit editContent();
             }
             else
@@ -92,6 +93,7 @@ void PageCreate::do_init()
 void PageCreate::on_labelDragText_linkActivated(const QString &link)
 {
     settings.inputVideoPath = QFileDialog::getOpenFileName(this, tr("选择素材文件..."), QDir::currentPath(), tr("视频文件 (*.mp4);;图片文件 (*.jpg *.png)"));
+    settings.inputVideoInfo.setFile(settings.inputVideoPath);
     if(!settings.inputVideoPath.isEmpty())
         emit editContent();
 }

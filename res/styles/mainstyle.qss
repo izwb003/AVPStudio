@@ -32,14 +32,112 @@ QRadioButton {
     color: white
 }
 
+QRadioButton::indicator {
+    width: 10px;
+    height: 10px;
+    border: 1px solid grey;
+    border-radius: 6px;
+    background-color: grey
+}
+
+QRadioButton::indicator:checked {
+    background-color: blue
+}
+
 QPushButton {
     color: white;
-    background-color: grey;
-    border: 1px solid grey;
+    background-color: blue;
+    border: 1px solid blue;
     border-radius: 5px;
     padding: 5px 10px 5px 10px
 }
 
 QPushButton::hover {
-    background-color: lightgrey
+    background-color: darkblue
+}
+
+QDoubleSpinBox {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    border: 0px
+}
+
+QDoubleSpinBox::up-arrow {
+    image: url(:/images/images/up.png);
+    width: 5px;
+    height: 5px
+}
+
+QDoubleSpinBox::down-arrow {
+    image: url(:/images/images/down.png);
+    width: 5px;
+    height: 5px
+}
+
+QComboBox {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QComboBox::drop-down {
+    border: 0px
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/images/down.png);
+    width: 10px;
+    height: 10px
+}
+
+QComboBox QAbstractItemView {
+    color: white;
+    background-color: #3d3d3d
+}
+
+QLineEdit {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QCheckBox {
+    color: white
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/images/images/switch-off.png);
+    width: 32px;
+    height: 32px
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/images/images/switch-on.png);
+    width: 32px;
+    height: 32px
+}
+
+QSlider::handle {
+    background-color: white;
+    border: 1px solid white;
+    width: 10px;
+    margin: -15px 0px -15px 0px;
+    border-radius: 5px
+}
+
+QSlider::groove:horizontal {
+    background-color: #3d3d3d;
+    border-radius: 5px
+}
+
+QSlider::sub-page:horizontal {
+    background-color: blue;
+    border-radius: 5px
 }

@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pageWelcome, SIGNAL(createContent()), this, SLOT(do_createContent()));
     connect(pageWelcome, SIGNAL(createContent()), pageCreate, SLOT(do_init()));
     connect(pageCreate, SIGNAL(editContent()), this, SLOT(do_editContent()));
+    connect(pageCreate, SIGNAL(editContent()), pageEdit, SLOT(do_init()));
 }
 
 MainWindow::~MainWindow()

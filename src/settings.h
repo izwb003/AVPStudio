@@ -19,6 +19,7 @@
 #define SETTINGS_H
 
 #include <QString>
+#include <QFileInfo>
 
 namespace AVP {
 
@@ -36,6 +37,7 @@ public:
     QString getRealSize();
 
     QString inputVideoPath;
+    QFileInfo inputVideoInfo;
 };
 }
 

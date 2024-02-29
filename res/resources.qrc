@@ -10,5 +10,11 @@
         <file>images/AVP_Medium.jpg</file>
         <file>images/AVP_Small.jpg</file>
         <file>images/drag-drop.png</file>
+        <file>images/down.png</file>
+        <file>images/up.png</file>
+        <file>images/switch-off.png</file>
+        <file>images/switch-on.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
     </qresource>
 </RCC>
