@@ -130,38 +130,18 @@
                  <string>视频帧率：</string>
                 </property>
                 <property name="buddy">
-                 <cstring>comboBox</cstring>
+                 <cstring>comboBoxFrameRate</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox">
+               <widget class="QComboBox" name="comboBoxFrameRate">
                 <property name="currentText">
-                 <string>23.976fps</string>
+                 <string/>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>-1</number>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>23.976fps</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>24fps</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>25fps</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>30fps</string>
-                 </property>
-                </item>
                </widget>
               </item>
              </layout>
@@ -179,18 +159,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBoxVideoColor">
-                <item>
-                 <property name="text">
-                  <string>BT.470</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>BT.709</string>
-                 </property>
-                </item>
-               </widget>
+               <widget class="QComboBox" name="comboBoxVideoColor"/>
               </item>
              </layout>
             </item>
@@ -217,6 +186,16 @@
                <widget class="QCheckBox" name="checkBoxDolbyNaming">
                 <property name="text">
                  <string>为输出文件使用杜比命名</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxPadding">
+                <property name="text">
+                 <string>拉伸画面以填充</string>
                 </property>
                </widget>
               </item>

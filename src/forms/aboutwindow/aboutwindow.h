@@ -15,52 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef PAGEEDIT_H
-#define PAGEEDIT_H
+#ifndef ABOUTWINDOW_H
+#define ABOUTWINDOW_H
 
 #include <QWidget>
-#include <QMediaPlayer>
 
 namespace Ui {
-class PageEdit;
+class AboutWindow;
 }
 
-class PageEdit : public QWidget
+class AboutWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PageEdit(QWidget *parent = nullptr);
-    ~PageEdit();
+    explicit AboutWindow(QWidget *parent = nullptr);
+    ~AboutWindow();
 
 private slots:
-    void do_init();
-
-    void do_positionChanged(qint64 position);
-
-    void do_durationChanged(qint64 duration);
-
-    void do_playStateChanged(QMediaPlayer::PlaybackState state);
-
-    void do_playErrorOccured(QMediaPlayer::Error error, const QString &errorString);
-
-    void on_toolButtonPausePlay_clicked(bool checked);
-
-    void on_verticalSliderVolume_valueChanged(int value);
-
-    void on_horizontalSliderPosition_valueChanged(int value);
-
-    void on_checkBoxPadding_clicked(bool checked);
-
-    void on_pushButtonOutput_clicked();
+    void on_pushButtonOK_clicked();
 
 private:
-    Ui::PageEdit *ui;
-
-    QMediaPlayer *player;
-
-    QString durationTime = "00:00";
-    QString positionTime = "00:00";
+    Ui::AboutWindow *ui;
 };
 
-#endif // PAGEEDIT_H
+#endif // ABOUTWINDOW_H

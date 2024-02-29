@@ -43,6 +43,13 @@ endif(WIN32)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${FORMS_DIRECTORY})
 
+#Pass version number
+add_definitions(
+    /DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    /DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    /DPROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH}
+)
+
 # Set Qt executables
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AVPStudio

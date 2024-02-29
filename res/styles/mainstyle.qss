@@ -141,3 +141,10 @@ QSlider::sub-page:horizontal {
     background-color: blue;
     border-radius: 5px
 }
+
+QTextBrowser {
+    border: 1px solid #3d3d3d;
+    border-radius: 5px;
+    background-color: #3d3d3d;
+    color: white
+}

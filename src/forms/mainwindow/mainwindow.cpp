@@ -19,6 +19,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+#include "aboutwindow/aboutwindow.h"
 #include "pagewelcome.h"
 #include "pagecreate.h"
 #include "pageedit.h"
@@ -46,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pageWelcome, SIGNAL(createContent()), pageCreate, SLOT(do_init()));
     connect(pageCreate, SIGNAL(editContent()), this, SLOT(do_editContent()));
     connect(pageCreate, SIGNAL(editContent()), pageEdit, SLOT(do_init()));
+    connect(this, SIGNAL(openFile(QString)), pageCreate, SLOT(on_labelDragText_linkActivated(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -57,9 +59,37 @@ void MainWindow::do_createContent()
 {
     this->setWindowTitle("AVPStudio - Create (" + settings.getSizeString() + ")");
     ui->stackedWidget->setCurrentIndex(1);
+    ui->actionOpenFile->setEnabled(true);
 }
 
 void MainWindow::do_editContent()
 {
     ui->stackedWidget->setCurrentIndex(2);
 }
+
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutWindow *aboutWindow = new AboutWindow();
+    aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
+    aboutWindow->show();
+}
+
+
+void MainWindow::on_actionExit_triggered()
+{
+    qApp->quit();
+}
+
+
+void MainWindow::on_actionNewContent_triggered()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->actionOpenFile->setEnabled(false);
+}
+
+
+void MainWindow::on_actionOpenFile_triggered()
+{
+    emit openFile("");
+}
+

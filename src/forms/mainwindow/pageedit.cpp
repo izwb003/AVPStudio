@@ -21,6 +21,7 @@
 #include "settings.h"
 
 #include <QAudioOutput>
+#include <QFileDialog>
 #include <QMessageBox>
 
 PageEdit::PageEdit(QWidget *parent)
@@ -29,11 +30,25 @@ PageEdit::PageEdit(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->widgetVideoPreview->setAspectRatioMode(Qt::IgnoreAspectRatio);
     player = new QMediaPlayer(this);
     QAudioOutput *audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
     player->setVideoOutput(ui->widgetVideoPreview);
+
+    ui->comboBoxFrameRate->addItem("23.976fps", QVariant::fromValue(av_make_q(24000, 1001)));
+    ui->comboBoxFrameRate->addItem("24fps", QVariant::fromValue(av_make_q(24, 1)));
+    ui->comboBoxFrameRate->addItem("25fps", QVariant::fromValue(av_make_q(25, 1)));
+    ui->comboBoxFrameRate->addItem("30fps", QVariant::fromValue(av_make_q(30, 1)));
+
+    AVP::ColorSettings color470;
+    color470.outputColorPrimary = AVCOL_PRI_BT470M;
+    color470.outputVideoColorTrac = AVCOL_TRC_GAMMA22;
+    ui->comboBoxVideoColor->addItem("BT.470", QVariant::fromValue(color470));
+
+    AVP::ColorSettings color709;
+    color709.outputColorPrimary = AVCOL_PRI_BT709;
+    color709.outputVideoColorTrac = AVCOL_TRC_BT709;
+    ui->comboBoxVideoColor->addItem("BT.709", QVariant::fromValue(color709));
 
     connect(player, &QMediaPlayer::positionChanged, this, &PageEdit::do_positionChanged);
     connect(player, &QMediaPlayer::durationChanged, this, &PageEdit::do_durationChanged);
@@ -130,5 +145,28 @@ void PageEdit::on_horizontalSliderPosition_valueChanged(int value)
 {
     if(ui->horizontalSliderPosition->isSliderDown())
         player->setPosition(value);
+}
+
+
+void PageEdit::on_checkBoxPadding_clicked(bool checked)
+{
+    if(checked)
+        ui->widgetVideoPreview->setAspectRatioMode(Qt::IgnoreAspectRatio);
+    else
+        ui->widgetVideoPreview->setAspectRatioMode(Qt::KeepAspectRatio);
+}
+
+
+void PageEdit::on_pushButtonOutput_clicked()
+{
+    settings.outputVideoBitRate = ui->doubleSpinBoxVideoBitRate->value();
+    settings.outputFrameRate = ui->comboBoxFrameRate->currentData(Qt::UserRole).value<AVRational>();
+    settings.outputColor = ui->comboBoxVideoColor->currentData(Qt::UserRole).value<AVP::ColorSettings>();
+    settings.outputFileName = ui->lineEditFileName->text();
+    settings.useDolbyNaming = ui->checkBoxDolbyNaming->isChecked();
+    settings.scalePicture = ui->checkBoxPadding->isChecked();
+    settings.outputVolume = ui->verticalSliderVolume->value();
+
+    settings.outputFilePath = QFileDialog::getExistingDirectory(this, tr("选择保存位置..."), QDir::currentPath());
 }
 

@@ -18,6 +18,11 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+extern "C" {
+#include <libavutil/rational.h>
+#include <libavutil/pixfmt.h>
+}
+
 #include <QString>
 #include <QFileInfo>
 
@@ -29,6 +34,11 @@ enum AVPSize {
     kAVPLargeSize
 };
 
+struct ColorSettings {
+    AVColorPrimaries outputColorPrimary = AVCOL_PRI_BT470M;
+    AVColorTransferCharacteristic outputVideoColorTrac = AVCOL_TRC_GAMMA22;
+};
+
 class AVPSettings {
 public:
     AVPSize size = kAVPMediumSize;
@@ -38,6 +48,16 @@ public:
 
     QString inputVideoPath;
     QFileInfo inputVideoInfo;
+
+    double outputVideoBitRate = 20.0;
+    AVRational outputFrameRate = av_make_q(24, 1);
+    ColorSettings outputColor;
+    QString outputFileName = "";
+    bool useDolbyNaming = true;
+    bool scalePicture = false;
+    int outputVolume = 100;
+
+    QString outputFilePath;
 };
 }
 
