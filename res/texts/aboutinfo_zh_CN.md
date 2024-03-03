@@ -12,11 +12,11 @@
 
 ### 测试
 
-[@冷小鸢aque](https://space.bilibili.com/27063907/) [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)
+[@冷小鸢aque](https://space.bilibili.com/27063907/)    [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)
 
 ### 同时提供支持
 
-[@神奇的红毛丹](https://space.bilibili.com/364856318/)  @一个复杂精密的好名字   @寒 @还有这种事？   @茶.    @R.M.Dolby  @妙木山蛤蟆仙人
+[@神奇的红毛丹](https://space.bilibili.com/364856318/)    @一个复杂精密的好名字    @寒    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
 
 （以上排名不分先后）
 

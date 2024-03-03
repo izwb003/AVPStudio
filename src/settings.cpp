@@ -61,3 +61,35 @@ QString AVP::AVPSettings::getRealSize()
         return "";
     }
 }
+
+QString AVP::AVPSettings::getOutputVideoFinalName()
+{
+    if(useDolbyNaming)
+    {
+        switch(size)
+        {
+        case kAVPSmallSize:
+            return "V2_" + outputFileName + "_video" + "_5m" + ".mxl";
+            break;
+        case kAVPMediumSize:
+            return "V2_" + outputFileName + "_video" + "_9m" + ".mxl";
+            break;
+        case kAVPLargeSize:
+            return "V2_" + outputFileName + "_video" + "_12m" + ".mxl";
+            break;
+        default:
+            return outputFileName + ".mxl";
+            break;
+        }
+    }
+    else
+        return outputFileName + ".mxl";
+}
+
+QString AVP::AVPSettings::getOutputAudioFinalName()
+{
+    if(useDolbyNaming)
+        return outputFileName + "_audio_all.wav";
+    else
+        return outputFileName + ".wav";
+}

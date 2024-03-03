@@ -23,6 +23,7 @@
 #include "pagewelcome.h"
 #include "pagecreate.h"
 #include "pageedit.h"
+#include "pageprocess.h"
 
 #include "settings.h"
 
@@ -33,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint);
+    this->setFixedSize(this->width(), this->height());
     this->setWindowTitle("AVPStudio - Welcome");
 
     PageWelcome *pageWelcome = new PageWelcome;
@@ -41,12 +44,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(pageCreate);
     PageEdit *pageEdit = new PageEdit;
     ui->stackedWidget->addWidget(pageEdit);
+    PageProcess *pageProcess = new PageProcess;
+    ui->stackedWidget->addWidget(pageProcess);
     ui->stackedWidget->setCurrentIndex(0);
 
     connect(pageWelcome, SIGNAL(createContent()), this, SLOT(do_createContent()));
     connect(pageWelcome, SIGNAL(createContent()), pageCreate, SLOT(do_init()));
     connect(pageCreate, SIGNAL(editContent()), this, SLOT(do_editContent()));
     connect(pageCreate, SIGNAL(editContent()), pageEdit, SLOT(do_init()));
+    connect(pageEdit, SIGNAL(toProcess()), this, SLOT(do_toProcess()));
+    connect(pageProcess, SIGNAL(reInit()), this, SLOT(on_actionNewContent_triggered()));
+    connect(this, SIGNAL(toProcess()), pageProcess, SLOT(do_proc()));
     connect(this, SIGNAL(openFile(QString)), pageCreate, SLOT(on_labelDragText_linkActivated(QString)));
 }
 
@@ -67,6 +75,15 @@ void MainWindow::do_editContent()
     ui->stackedWidget->setCurrentIndex(2);
 }
 
+void MainWindow::do_toProcess()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+    this->setWindowTitle("AVPStudio - Processing");
+    ui->actionNewContent->setEnabled(false);
+    ui->actionOpenFile->setEnabled(false);
+    emit toProcess();
+}
+
 void MainWindow::on_actionAbout_triggered()
 {
     AboutWindow *aboutWindow = new AboutWindow();
@@ -84,6 +101,7 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionNewContent_triggered()
 {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->actionNewContent->setEnabled(true);
     ui->actionOpenFile->setEnabled(false);
 }
 

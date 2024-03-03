@@ -33,6 +33,9 @@ public:
     explicit PageEdit(QWidget *parent = nullptr);
     ~PageEdit();
 
+signals:
+    void toProcess();
+
 private slots:
     void do_init();
 

@@ -43,11 +43,13 @@ PageEdit::PageEdit(QWidget *parent)
     AVP::ColorSettings color470;
     color470.outputColorPrimary = AVCOL_PRI_BT470M;
     color470.outputVideoColorTrac = AVCOL_TRC_GAMMA22;
+    color470.outputVideoColorSpace = AVCOL_SPC_FCC;
     ui->comboBoxVideoColor->addItem("BT.470", QVariant::fromValue(color470));
 
     AVP::ColorSettings color709;
     color709.outputColorPrimary = AVCOL_PRI_BT709;
     color709.outputVideoColorTrac = AVCOL_TRC_BT709;
+    color709.outputVideoColorSpace = AVCOL_SPC_BT709;
     ui->comboBoxVideoColor->addItem("BT.709", QVariant::fromValue(color709));
 
     connect(player, &QMediaPlayer::positionChanged, this, &PageEdit::do_positionChanged);
@@ -167,6 +169,16 @@ void PageEdit::on_pushButtonOutput_clicked()
     settings.scalePicture = ui->checkBoxPadding->isChecked();
     settings.outputVolume = ui->verticalSliderVolume->value();
 
+    if(settings.outputFileName == "")
+    {
+        QMessageBox::critical(this, tr("错误"), tr("没有指定输出文件名。"));
+        return;
+    }
+
     settings.outputFilePath = QFileDialog::getExistingDirectory(this, tr("选择保存位置..."), QDir::currentPath());
+    if(settings.outputFilePath == "")
+        return;
+
+    emit toProcess();
 }
 

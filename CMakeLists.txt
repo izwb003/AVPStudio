@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add Qt packages
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets LinguistTools Multimedia MultimediaWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets LinguistTools Multimedia MultimediaWidgets)
 
 # Set multi-language TS files
 set(TS_FILES ts/AVPStudio_zh_CN.ts)
@@ -55,6 +55,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AVPStudio
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
     )
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
@@ -88,18 +89,25 @@ endif(WIN32)
 
 find_library(LIBAVUTIL_PATH avutil ${FFMPEG_PATH}/lib)
 find_library(LIBAVCODEC_PATH avcodec ${FFMPEG_PATH}/lib)
+find_library(LIBAVFORMAT_PATH avformat ${FFMPEG_PATH}/lib)
 find_library(LIBAVFILTER_PATH avfilter ${FFMPEG_PATH}/lib)
+find_library(LIBSWSCALE_PATH swscale ${FFMPEG_PATH}/lib)
+find_library(LIBSWRESAMPLE_PATH swresample ${FFMPEG_PATH}/lib)
 
 include_directories(${FFMPEG_PATH}/include)
 
 # Link libraries
 target_link_libraries(AVPStudio PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
     ${LIBAVUTIL_PATH}
     ${LIBAVCODEC_PATH}
+    ${LIBAVFORMAT_PATH}
     ${LIBAVFILTER_PATH}
+    ${LIBSWSCALE_PATH}
+    ${LIBSWRESAMPLE_PATH}
 )
 
 # Set install rules

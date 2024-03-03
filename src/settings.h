@@ -37,6 +37,7 @@ enum AVPSize {
 struct ColorSettings {
     AVColorPrimaries outputColorPrimary = AVCOL_PRI_BT470M;
     AVColorTransferCharacteristic outputVideoColorTrac = AVCOL_TRC_GAMMA22;
+    AVColorSpace outputVideoColorSpace = AVCOL_SPC_FCC;
 };
 
 class AVPSettings {
@@ -56,6 +57,9 @@ public:
     bool useDolbyNaming = true;
     bool scalePicture = false;
     int outputVolume = 100;
+
+    QString getOutputVideoFinalName();
+    QString getOutputAudioFinalName();
 
     QString outputFilePath;
 };
