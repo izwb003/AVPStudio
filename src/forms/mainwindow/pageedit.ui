@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PageEdit</class>
+ <widget class="QWidget" name="PageEdit">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1202</width>
+    <height>451</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,8">
+   <item>
+    <widget class="QLabel" name="labelFileName">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutPreview" stretch="4,1">
+       <item>
+        <widget class="QGroupBox" name="groupBoxPreview">
+         <property name="title">
+          <string>预览</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QVideoWidget" name="widgetVideoPreview" native="true"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxPreviewControl">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QSlider" name="horizontalSliderPosition">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButtonPausePlay">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../../res/resources.qrc">
+              <normaloff>:/images/images/play.png</normaloff>:/images/images/play.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelDuration">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutOutputSettings" stretch="4,1">
+       <item>
+        <widget class="QGroupBox" name="groupBoxOutputSettings">
+         <property name="title">
+          <string>输出设置</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="5,0">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayoutOutputSettingsList">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutVideoBitRate" stretch="1,2">
+              <item>
+               <widget class="QLabel" name="labelVideoBitRate">
+                <property name="text">
+                 <string>视频码率：</string>
+                </property>
+                <property name="buddy">
+                 <cstring>doubleSpinBoxVideoBitRate</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="doubleSpinBoxVideoBitRate">
+                <property name="suffix">
+                 <string>Mb/s</string>
+                </property>
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="maximum">
+                 <double>200.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>100.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutVideoFrameRate" stretch="1,2">
+              <item>
+               <widget class="QLabel" name="labelVideoFrameRate">
+                <property name="text">
+                 <string>视频帧率：</string>
+                </property>
+                <property name="buddy">
+                 <cstring>comboBoxFrameRate</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBoxFrameRate">
+                <property name="currentText">
+                 <string/>
+                </property>
+                <property name="currentIndex">
+                 <number>-1</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutVideoColor" stretch="1,2">
+              <item>
+               <widget class="QLabel" name="labelVideoColor">
+                <property name="text">
+                 <string>色彩空间与传输特性（高级）：</string>
+                </property>
+                <property name="buddy">
+                 <cstring>comboBoxVideoColor</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBoxVideoColor"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutFileName">
+              <item>
+               <widget class="QLabel" name="labelFileNameOutput">
+                <property name="text">
+                 <string>输出文件名称：</string>
+                </property>
+                <property name="buddy">
+                 <cstring>lineEditFileName</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEditFileName"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutDolbyNaming">
+              <item>
+               <widget class="QCheckBox" name="checkBoxDolbyNaming">
+                <property name="text">
+                 <string>为输出文件使用杜比命名</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxPadding">
+                <property name="text">
+                 <string>拉伸画面以填充</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayoutVolume">
+            <item>
+             <widget class="QSlider" name="verticalSliderVolume">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBothSides</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelVolume">
+              <property name="text">
+               <string>输出音量</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>verticalSliderVolume</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxOutput">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="pushButtonOutput">
+            <property name="text">
+             <string>导出放映内容</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVideoWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">qvideowidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../res/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

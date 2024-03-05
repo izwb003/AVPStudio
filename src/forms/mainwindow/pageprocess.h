@@ -15,41 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef PAGEPROCESS_H
+#define PAGEPROCESS_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "doprocess.h"
 
-#include <QMainWindow>
+#include <QWidget>
 
-QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class PageProcess;
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class PageProcess : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit PageProcess(QWidget *parent = nullptr);
+    ~PageProcess();
 
 signals:
-    void openFile(QString link);
-    void toProcess();
+    void terminate();
+    void reInit();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::PageProcess *ui;
+    TDoProcess *doProcessThread;
 
 private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
+    void do_proc();
+    void do_setProgressMax(int64_t num);
+    void do_setProgress(int64_t num);
+    void do_setLabel(QString str);
+    void on_pushButtonCancel_clicked();
 };
-#endif // MAINWINDOW_H
+
+#endif // PAGEPROCESS_H

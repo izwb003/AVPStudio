@@ -15,41 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include "aboutwindow.h"
+#include "ui_aboutwindow.h"
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
+AboutWindow::AboutWindow(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::AboutWindow)
 {
-    Q_OBJECT
+    ui->setupUi(this);
+    this->setWindowFlags(windowFlags()& ~Qt::WindowMinMaxButtonsHint);
+    this->setFixedSize(this->width(), this->height());
 
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ui->labelVersion->setText(tr("版本") + QString::number(PROJECT_VERSION_MAJOR) + "." + QString::number(PROJECT_VERSION_MINOR) + "." + QString::number(PROJECT_VERSION_PATCH) + tr("构建于") + __DATE__);
+}
 
-signals:
-    void openFile(QString link);
-    void toProcess();
+AboutWindow::~AboutWindow()
+{
+    delete ui;
+}
 
-private:
-    Ui::MainWindow *ui;
+void AboutWindow::on_pushButtonOK_clicked()
+{
+    this->close();
+}
 
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-};
-#endif // MAINWINDOW_H

@@ -15,41 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef PAGECOMPLETED_H
+#define PAGECOMPLETED_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QWidget>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class PageCompleted;
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class PageCompleted : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit PageCompleted(QWidget *parent = nullptr);
+    ~PageCompleted();
+
+    void setStatus(bool isError, QString errorStr);
 
 signals:
-    void openFile(QString link);
-    void toProcess();
-
-private:
-    Ui::MainWindow *ui;
+    void reInit();
 
 private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
+    void on_pushButtonOK_clicked();
+
+private:
+    Ui::PageCompleted *ui;
 };
-#endif // MAINWINDOW_H
+
+#endif // PAGECOMPLETED_H

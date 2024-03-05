@@ -15,41 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef PAGECREATE_H
+#define PAGECREATE_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QWidget>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class PageCreate;
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class PageCreate : public QWidget
 {
     Q_OBJECT
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
+
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit PageCreate(QWidget *parent = nullptr);
+    ~PageCreate();
 
 signals:
-    void openFile(QString link);
-    void toProcess();
-
-private:
-    Ui::MainWindow *ui;
+    void editContent();
 
 private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
+    void do_init();
+
+    void on_labelDragText_linkActivated(const QString &link);
+
+private:
+    Ui::PageCreate *ui;
+
+    void rewriteLabelDragText();
 };
-#endif // MAINWINDOW_H
+
+#endif // PAGECREATE_H

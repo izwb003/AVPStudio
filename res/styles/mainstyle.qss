@@ -1,0 +1,162 @@
+QWidget {
+    background-color: #1b1b1b
+}
+
+QLabel {
+    color: white
+}
+
+QMenuBar, QMenu {
+    background-color: white
+}
+
+QMenu::item:selected {
+    color: black;
+    background-color: lightgrey;
+    border-radius: 2px;
+}
+
+QGroupBox {
+    color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 5px
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+
+QRadioButton {
+    color: white
+}
+
+QRadioButton::indicator {
+    width: 10px;
+    height: 10px;
+    border: 1px solid grey;
+    border-radius: 6px;
+    background-color: grey
+}
+
+QRadioButton::indicator:checked {
+    background-color: blue
+}
+
+QPushButton {
+    color: white;
+    background-color: blue;
+    border: 1px solid blue;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px
+}
+
+QPushButton::hover {
+    background-color: darkblue
+}
+
+QDoubleSpinBox {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    border: 0px
+}
+
+QDoubleSpinBox::up-arrow {
+    image: url(:/images/images/up.png);
+    width: 5px;
+    height: 5px
+}
+
+QDoubleSpinBox::down-arrow {
+    image: url(:/images/images/down.png);
+    width: 5px;
+    height: 5px
+}
+
+QComboBox {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QComboBox::drop-down {
+    border: 0px
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/images/down.png);
+    width: 10px;
+    height: 10px
+}
+
+QComboBox QAbstractItemView {
+    color: white;
+    background-color: #3d3d3d
+}
+
+QLineEdit {
+    color: white;
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+    border-radius: 5px
+}
+
+QCheckBox {
+    color: white
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:/images/images/switch-off.png);
+    width: 32px;
+    height: 32px
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/images/images/switch-on.png);
+    width: 32px;
+    height: 32px
+}
+
+QSlider::handle {
+    background-color: white;
+    border: 1px solid white;
+    width: 10px;
+    margin: -15px 0px -15px 0px;
+    border-radius: 5px
+}
+
+QSlider::groove:horizontal {
+    background-color: #3d3d3d;
+    border-radius: 5px
+}
+
+QSlider::sub-page:horizontal {
+    background-color: blue;
+    border-radius: 5px
+}
+
+QTextBrowser {
+    border: 1px solid #3d3d3d;
+    border-radius: 5px;
+    background-color: #3d3d3d;
+    color: white
+}
+
+QProgressBar {
+    background-color: #3d3d3d;
+    height: 5px;
+    border-radius: 5px
+}
+
+QProgressBar::chunk {
+    background-color: blue;
+    border: 1px solid blue;
+    border-radius: 5px
+}

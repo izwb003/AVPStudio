@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/icon256.ico</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>styles/mainstyle.qss</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/AVP_Large.jpg</file>
+        <file>images/AVP_Medium.jpg</file>
+        <file>images/AVP_Small.jpg</file>
+        <file>images/drag-drop.png</file>
+        <file>images/down.png</file>
+        <file>images/up.png</file>
+        <file>images/switch-off.png</file>
+        <file>images/switch-on.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
+        <file>images/completed.png</file>
+        <file>images/error.png</file>
+    </qresource>
+    <qresource prefix="/texts">
+        <file>texts/aboutinfo_zh_CN.md</file>
+    </qresource>
+</RCC>
