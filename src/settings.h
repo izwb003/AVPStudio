@@ -46,6 +46,7 @@ public:
     QString getSizeString();
     QString getSizeResolution();
     QString getRealSize();
+    int getWidth();
 
     QString inputVideoPath;
     QFileInfo inputVideoInfo;

@@ -50,7 +50,8 @@ QString AVP::AVPSettings::getSizeResolution()
 
 QString AVP::AVPSettings::getRealSize()
 {
-    switch(this->size) {
+    switch(this->size)
+    {
     case kAVPSmallSize:
         return "5.5Mx2.1M";
     case kAVPMediumSize:
@@ -60,6 +61,20 @@ QString AVP::AVPSettings::getRealSize()
     default:
         return "";
     }
+}
+
+int AVP::AVPSettings::getWidth()
+{
+    switch(this->size)
+    {
+    case kAVPSmallSize:
+        return 2830;
+    case kAVPMediumSize:
+        return 4633;
+    case kAVPLargeSize:
+        return 6167;
+    }
+    return 0;
 }
 
 QString AVP::AVPSettings::getOutputVideoFinalName()
