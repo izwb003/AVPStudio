@@ -34,28 +34,25 @@ extern "C" {
 #include <libswresample/swresample.h>
 }
 
-#include <QMessageBox>
-
-// FFmpeg error parser
-static int avError;
-static char avErrorStr[AV_ERROR_MAX_STRING_SIZE];
-
 // FFmpeg filter graph description
 static const char *filterGraphLarge =
-    "[in]scale=6166:1080[scaled];"
+    "[in]pad[expanded];"
+    "[expanded]scale=6166:1080[scaled];"
     "[scaled]split[scaled1][scaled2];"
     "[scaled1]crop=3840:1080:0:0[left];"
     "[scaled2]crop=3840:1080:2327:0[right];"
     "[left][right]vstack=2[out]";
 static const char *filterGraphMedium =
-    "[in]scale=4632:1080[scaled];"
+    "[in]pad[expanded];"
+    "[expanded]scale=4632:1080[scaled];"
     "[scaled]pad=6166:1080:767:0:black[padded];"
     "[padded]split[padded1][padded2];"
     "[padded1]crop=3840:1080:0:0[left];"
     "[padded2]crop=3840:1080:2327:0[right];"
     "[left][right]vstack=2[out]";
 static const char *filterGraphSmall =
-    "[in]scale=2830:1080[scaled];"
+    "[in]pad[expanded];"
+    "[expanded]scale=2830:1080[scaled];"
     "[scaled]pad=6166:1080:1668:0:black[padded];"
     "[padded]split[padded1][padded2];"
     "[padded1]crop=3840:1080:0:0[left];"
@@ -67,9 +64,12 @@ TDoProcess::TDoProcess(QObject *parent) {}
 void TDoProcess::run()
 {
     // FFmpeg init
-    //av_log_set_level(AV_LOG_ERROR);
+    av_log_set_level(AV_LOG_ERROR);
 
     // Init variables
+    static int avError = 0;
+    QString avErrorMsg;
+
     AVFormatContext *iVideoFmtCxt = NULL;
 
     int iVideoStreamID = -1;
@@ -95,8 +95,18 @@ void TDoProcess::run()
 
     char filterArgs[512] = {0};
 
-    AVFrame *iFrame = NULL;
-    AVFrame *oFrame = NULL;
+    AVFrame *vFrameIn = NULL;
+    AVFrame *vFrameFiltered = NULL;
+    AVFrame *vFrameOut = NULL;
+
+    AVFilterGraph *videoFilterGraph = NULL;
+    AVFilterInOut *videoFilterInput = NULL;
+    AVFilterInOut *videoFilterOutput = NULL;
+
+    const AVFilter *videoFilterSrc = NULL;
+    AVFilterContext *videoFilterSrcCxt = NULL;
+    const AVFilter *videoFilterSink = NULL;
+    AVFilterContext *videoFilterSinkCxt = NULL;
 
     SwsContext *scale422Cxt = NULL;
 
@@ -105,6 +115,7 @@ void TDoProcess::run()
     AVFrame *aFrameOut = NULL;
 
     AVFilterGraph *volumeFilterGraph = NULL;
+
     const AVFilter *volumeFilter = NULL;
     AVFilterContext *volumeFilterCxt = NULL;
 
@@ -195,14 +206,52 @@ void TDoProcess::run()
     packet = av_packet_alloc();
 
     // Convert video
-    iFrame = av_frame_alloc();
-    oFrame = av_frame_alloc();
+    vFrameIn = av_frame_alloc();
+    vFrameFiltered = av_frame_alloc();
+    vFrameOut = av_frame_alloc();
 
     emit setLabel(tr("转换视频中...") + settings.getOutputVideoFinalName());
     emit setProgressMax(iVideoFmtCxt->streams[iVideoStreamID]->duration * av_q2d(iVideoFmtCxt->streams[iVideoStreamID]->time_base));
 
+    // Set video filter
+    videoFilterGraph = avfilter_graph_alloc();
+
+    videoFilterSrc = avfilter_get_by_name("buffer");
+    char videoFilterSrcArgs[512];
+    snprintf(videoFilterSrcArgs, sizeof(videoFilterSrcArgs), "video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:pixel_aspect=%d/%d", iVideoDecoderCxt->width, iVideoDecoderCxt->height, iVideoDecoderCxt->pix_fmt, iVideoFmtCxt->streams[iVideoStreamID]->time_base.num, iVideoFmtCxt->streams[iVideoStreamID]->time_base.den, iVideoDecoderCxt->sample_aspect_ratio.num, iVideoDecoderCxt->sample_aspect_ratio.den);
+    avError = avfilter_graph_create_filter(&videoFilterSrcCxt, videoFilterSrc, "in", videoFilterSrcArgs, 0, videoFilterGraph);
+
+    videoFilterSink = avfilter_get_by_name("buffersink");
+    avError = avfilter_graph_create_filter(&videoFilterSinkCxt, videoFilterSink, "out", 0, 0, videoFilterGraph);
+
+    videoFilterInput = avfilter_inout_alloc();
+    videoFilterInput -> name = av_strdup("in");
+    videoFilterInput -> filter_ctx = videoFilterSrcCxt;
+    videoFilterInput -> pad_idx = 0;
+    videoFilterInput -> next = NULL;
+
+    videoFilterOutput = avfilter_inout_alloc();
+    videoFilterOutput -> name = av_strdup("out");
+    videoFilterOutput -> filter_ctx = videoFilterSinkCxt;
+    videoFilterOutput -> pad_idx = 0;
+    videoFilterOutput -> next = NULL;
+
+    switch(settings.size)
+    {
+    case AVP::kAVPLargeSize:
+        avError = avfilter_graph_parse_ptr(videoFilterGraph, filterGraphLarge, &videoFilterOutput, &videoFilterInput, 0);
+        break;
+    case AVP::kAVPMediumSize:
+        avError = avfilter_graph_parse_ptr(videoFilterGraph, filterGraphMedium, &videoFilterOutput, &videoFilterInput, 0);
+        break;
+    case AVP::kAVPSmallSize:
+        avError = avfilter_graph_parse_ptr(videoFilterGraph, filterGraphSmall, &videoFilterOutput, &videoFilterInput, 0);
+        break;
+    }
+    avError = avfilter_graph_config(videoFilterGraph, 0);
+
     // Set YUV422 rescaler
-    scale422Cxt = sws_getContext(iVideoDecoderCxt->width, iVideoDecoderCxt->height, iVideoDecoderCxt->pix_fmt, 3840, 2160, AV_PIX_FMT_YUV422P, SWS_FAST_BILINEAR, 0, 0, 0);
+    scale422Cxt = sws_getContext(3840, 2160, iVideoDecoderCxt->pix_fmt, 3840, 2160, AV_PIX_FMT_YUV422P, SWS_FAST_BILINEAR, 0, 0, 0);
 
     while(av_read_frame(iVideoFmtCxt, packet) == 0)
     {
@@ -211,102 +260,108 @@ void TDoProcess::run()
             avError = avcodec_send_packet(iVideoDecoderCxt, packet);
             while(true)
             {
-                avError = avcodec_receive_frame(iVideoDecoderCxt, iFrame);
+                avError = avcodec_receive_frame(iVideoDecoderCxt, vFrameIn);
                 if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
                     break;
 
+                emit setProgress(vFrameIn->pkt_dts * av_q2d(iVideoFmtCxt->streams[iVideoStreamID]->time_base));
+
+                // Apply filter
+                avError = av_buffersrc_add_frame(videoFilterSrcCxt, vFrameIn);
+                avError = av_buffersink_get_frame(videoFilterSinkCxt, vFrameFiltered);
+
                 // Rescale to YUV422
-                avError = sws_scale_frame(scale422Cxt, oFrame, iFrame);
+                avError = sws_scale_frame(scale422Cxt, vFrameOut, vFrameFiltered);
 
                 // Encode
-                avError = avcodec_send_frame(oVideoEncoderCxt, oFrame);
+                avError = avcodec_send_frame(oVideoEncoderCxt, vFrameOut);
                 avError = avcodec_receive_packet(oVideoEncoderCxt, packet);
                 av_packet_rescale_ts(packet, oVideoEncoderCxt->time_base, oVideoFmtCxt->streams[0]->time_base);
                 avError = av_write_frame(oVideoFmtCxt, packet);
-
-                emit setProgress(iFrame->pkt_dts * av_q2d(iVideoFmtCxt->streams[iVideoStreamID]->time_base));
             }
         }
     }
 
-    //avformat_flush(iVideoFmtCxt);
     av_seek_frame(iVideoFmtCxt, iVideoStreamID, 0, AVSEEK_FLAG_BACKWARD);
 
     // Convert audio
-    aFrameIn = av_frame_alloc();
-    aFrameFiltered = av_frame_alloc();
-    aFrameOut = av_frame_alloc();
-
-    emit setLabel(tr("转换音频中...") + settings.getOutputAudioFinalName());
-    emit setProgressMax(iVideoFmtCxt->streams[iAudioStreamID]->duration * av_q2d(iVideoFmtCxt->streams[iAudioStreamID]->time_base));
-
-    // Set volume filter
-    char chLayoutDescription[64];
-
-    volumeFilterGraph = avfilter_graph_alloc();
-
-    volumeFilterSrc = avfilter_get_by_name("abuffer");
-    volumeFilterSrcCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilterSrc, "in");
-    avError = av_channel_layout_describe(&iAudioDecoderCxt->ch_layout, chLayoutDescription, sizeof(chLayoutDescription));
-    avError = av_opt_set(volumeFilterSrcCxt, "channel_layout", chLayoutDescription, AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set(volumeFilterSrcCxt, "sample_fmt", av_get_sample_fmt_name(iAudioDecoderCxt->sample_fmt), AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set_q(volumeFilterSrcCxt, "time_base", iAudioDecoderCxt->time_base, AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set_int(volumeFilterSrcCxt, "sample_rate", iAudioDecoderCxt->sample_rate, AV_OPT_SEARCH_CHILDREN);
-    avError = avfilter_init_str(volumeFilterSrcCxt, 0);
-
-    volumeFilter = avfilter_get_by_name("volume");
-    volumeFilterCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilter, "volume");
-    avError = av_opt_set(volumeFilterCxt, "volume", QString::number(settings.outputVolume / 100.0, 'f', 2).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-    avError = avfilter_init_str(volumeFilterCxt, 0);
-
-    volumeFilterSink = avfilter_get_by_name("abuffersink");
-    volumeFilterSinkCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilterSink, "out");
-    avError = av_channel_layout_describe(&iAudioDecoderCxt->ch_layout, chLayoutDescription, sizeof(chLayoutDescription));
-    avError = av_opt_set(volumeFilterSinkCxt, "channel_layout", chLayoutDescription, AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set(volumeFilterSinkCxt, "sample_fmt", av_get_sample_fmt_name(iAudioDecoderCxt->sample_fmt), AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set_q(volumeFilterSinkCxt, "time_base", iAudioDecoderCxt->time_base, AV_OPT_SEARCH_CHILDREN);
-    avError = av_opt_set_int(volumeFilterSinkCxt, "sample_rate", iAudioDecoderCxt->sample_rate, AV_OPT_SEARCH_CHILDREN);
-    avError = avfilter_init_str(volumeFilterSinkCxt, 0);
-
-    avError = avfilter_link(volumeFilterSrcCxt, 0, volumeFilterCxt, 0);
-    avError = avfilter_link(volumeFilterCxt, 0, volumeFilterSinkCxt, 0);
-    avError = avfilter_graph_config(volumeFilterGraph, 0);
-
-    // Set resampler
-    avError = swr_alloc_set_opts2(&resamplerCxt, &iAudioDecoderCxt->ch_layout, AV_SAMPLE_FMT_S32, 48000, &iAudioDecoderCxt->ch_layout, iAudioDecoderCxt->sample_fmt, iAudioDecoderCxt->sample_rate, 0, 0);
-    avError = swr_init(resamplerCxt);
-
-    while(av_read_frame(iVideoFmtCxt, packet) == 0)
+    if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
     {
-        if(packet->stream_index == iAudioStreamID)
+        aFrameIn = av_frame_alloc();
+        aFrameFiltered = av_frame_alloc();
+        aFrameOut = av_frame_alloc();
+
+        emit setLabel(tr("转换音频中...") + settings.getOutputAudioFinalName());
+        emit setProgressMax(iVideoFmtCxt->streams[iAudioStreamID]->duration * av_q2d(iVideoFmtCxt->streams[iAudioStreamID]->time_base));
+
+        // Set volume filter
+        char chLayoutDescription[64];
+
+        volumeFilterGraph = avfilter_graph_alloc();
+
+        volumeFilterSrc = avfilter_get_by_name("abuffer");
+        volumeFilterSrcCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilterSrc, "in");
+        avError = av_channel_layout_describe(&iAudioDecoderCxt->ch_layout, chLayoutDescription, sizeof(chLayoutDescription));
+        avError = av_opt_set(volumeFilterSrcCxt, "channel_layout", chLayoutDescription, AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set(volumeFilterSrcCxt, "sample_fmt", av_get_sample_fmt_name(iAudioDecoderCxt->sample_fmt), AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set_q(volumeFilterSrcCxt, "time_base", iAudioDecoderCxt->time_base, AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set_int(volumeFilterSrcCxt, "sample_rate", iAudioDecoderCxt->sample_rate, AV_OPT_SEARCH_CHILDREN);
+        avError = avfilter_init_str(volumeFilterSrcCxt, 0);
+
+        volumeFilter = avfilter_get_by_name("volume");
+        volumeFilterCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilter, "volume");
+        avError = av_opt_set(volumeFilterCxt, "volume", QString::number(settings.outputVolume / 100.0, 'f', 2).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+        avError = avfilter_init_str(volumeFilterCxt, 0);
+
+        volumeFilterSink = avfilter_get_by_name("abuffersink");
+        volumeFilterSinkCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilterSink, "out");
+        avError = av_channel_layout_describe(&iAudioDecoderCxt->ch_layout, chLayoutDescription, sizeof(chLayoutDescription));
+        avError = av_opt_set(volumeFilterSinkCxt, "channel_layout", chLayoutDescription, AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set(volumeFilterSinkCxt, "sample_fmt", av_get_sample_fmt_name(iAudioDecoderCxt->sample_fmt), AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set_q(volumeFilterSinkCxt, "time_base", iAudioDecoderCxt->time_base, AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set_int(volumeFilterSinkCxt, "sample_rate", iAudioDecoderCxt->sample_rate, AV_OPT_SEARCH_CHILDREN);
+        avError = avfilter_init_str(volumeFilterSinkCxt, 0);
+
+        avError = avfilter_link(volumeFilterSrcCxt, 0, volumeFilterCxt, 0);
+        avError = avfilter_link(volumeFilterCxt, 0, volumeFilterSinkCxt, 0);
+        avError = avfilter_graph_config(volumeFilterGraph, 0);
+
+        // Set resampler
+        avError = swr_alloc_set_opts2(&resamplerCxt, &iAudioDecoderCxt->ch_layout, AV_SAMPLE_FMT_S32, 48000, &iAudioDecoderCxt->ch_layout, iAudioDecoderCxt->sample_fmt, iAudioDecoderCxt->sample_rate, 0, 0);
+        avError = swr_init(resamplerCxt);
+
+        while(av_read_frame(iVideoFmtCxt, packet) == 0)
         {
-            avError = avcodec_send_packet(iAudioDecoderCxt, packet);
-            while(true)
+            if(packet->stream_index == iAudioStreamID)
             {
-                avError = avcodec_receive_frame(iAudioDecoderCxt, aFrameIn);
-                if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
-                    break;
+                avError = avcodec_send_packet(iAudioDecoderCxt, packet);
+                while(true)
+                {
+                    avError = avcodec_receive_frame(iAudioDecoderCxt, aFrameIn);
+                    if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
+                        break;
 
-                // Copy frame settings
-                aFrameOut -> ch_layout = aFrameIn -> ch_layout;
-                aFrameOut -> sample_rate = aFrameIn -> sample_rate;
-                aFrameOut -> format = AV_SAMPLE_FMT_S32;
-                aFrameOut -> nb_samples = av_rescale_rnd(swr_get_delay(resamplerCxt, 48000) + aFrameIn->nb_samples, 48000, iAudioDecoderCxt->sample_rate, AV_ROUND_UP);
-                aFrameOut -> pts = aFrameIn -> pts;
+                    emit setProgress(aFrameIn->pkt_dts * av_q2d(iVideoFmtCxt->streams[iAudioStreamID]->time_base));
 
-                // Apply volume filter
-                avError = av_buffersrc_add_frame(volumeFilterSrcCxt, aFrameIn);
-                avError = av_buffersink_get_frame(volumeFilterSinkCxt, aFrameFiltered);
+                    // Copy frame settings
+                    aFrameOut -> ch_layout = aFrameIn -> ch_layout;
+                    aFrameOut -> sample_rate = aFrameIn -> sample_rate;
+                    aFrameOut -> format = AV_SAMPLE_FMT_S32;
+                    aFrameOut -> nb_samples = av_rescale_rnd(swr_get_delay(resamplerCxt, 48000) + aFrameIn->nb_samples, 48000, iAudioDecoderCxt->sample_rate, AV_ROUND_UP);
+                    aFrameOut -> pts = aFrameIn -> pts;
 
-                // Resample
-                avError = swr_convert_frame(resamplerCxt, aFrameOut, aFrameFiltered);
+                    // Apply volume filter
+                    avError = av_buffersrc_add_frame(volumeFilterSrcCxt, aFrameIn);
+                    avError = av_buffersink_get_frame(volumeFilterSinkCxt, aFrameFiltered);
 
-                // Encode
-                avError = avcodec_send_frame(oAudioEncoderCxt, aFrameOut);
-                avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
-                avError = av_write_frame(oAudioFmtCxt, packet);
+                    // Resample
+                    avError = swr_convert_frame(resamplerCxt, aFrameOut, aFrameFiltered);
 
-                emit setProgress(aFrameIn->pkt_dts * av_q2d(iVideoFmtCxt->streams[iAudioStreamID]->time_base));
+                    // Encode
+                    avError = avcodec_send_frame(oAudioEncoderCxt, aFrameOut);
+                    avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
+                    avError = av_write_frame(oAudioFmtCxt, packet);
+                }
             }
         }
     }
@@ -323,5 +378,5 @@ void TDoProcess::run()
     if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
         avio_close(oAudioFmtCxt->pb);
 
-    emit completed(false, "");
+    emit completed(avError, avErrorMsg);
 }
