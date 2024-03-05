@@ -39,6 +39,7 @@ PageEdit::PageEdit(QWidget *parent)
     ui->comboBoxFrameRate->addItem("24fps", QVariant::fromValue(av_make_q(24, 1)));
     ui->comboBoxFrameRate->addItem("25fps", QVariant::fromValue(av_make_q(25, 1)));
     ui->comboBoxFrameRate->addItem("30fps", QVariant::fromValue(av_make_q(30, 1)));
+    ui->comboBoxFrameRate->setCurrentIndex(1);
 
     AVP::ColorSettings color470;
     color470.outputColorPrimary = AVCOL_PRI_BT470M;
