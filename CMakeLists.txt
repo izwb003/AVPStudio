@@ -55,6 +55,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AVPStudio
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/forms/mainwindow/pagecompleted.h src/forms/mainwindow/pagecompleted.cpp src/forms/mainwindow/pagecompleted.ui
 
     )
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

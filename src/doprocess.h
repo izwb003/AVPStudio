@@ -33,6 +33,7 @@ signals:
     void setProgressMax(int64_t num);
     void setProgress(int64_t num);
     void setLabel(QString str);
+    void completed(bool isError, QString errorStr);
 };
 
 #endif // TDOPROCESS_H

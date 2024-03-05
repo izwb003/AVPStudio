@@ -52,6 +52,8 @@ PageEdit::PageEdit(QWidget *parent)
     color709.outputVideoColorSpace = AVCOL_SPC_BT709;
     ui->comboBoxVideoColor->addItem("BT.709", QVariant::fromValue(color709));
 
+    ui->comboBoxVideoColor->setCurrentIndex(1);
+
     connect(player, &QMediaPlayer::positionChanged, this, &PageEdit::do_positionChanged);
     connect(player, &QMediaPlayer::durationChanged, this, &PageEdit::do_durationChanged);
     connect(player, &QMediaPlayer::playbackStateChanged, this, &PageEdit::do_playStateChanged);
@@ -168,6 +170,8 @@ void PageEdit::on_pushButtonOutput_clicked()
     settings.useDolbyNaming = ui->checkBoxDolbyNaming->isChecked();
     settings.scalePicture = ui->checkBoxPadding->isChecked();
     settings.outputVolume = ui->verticalSliderVolume->value();
+
+    player->pause();
 
     if(settings.outputFileName == "")
     {

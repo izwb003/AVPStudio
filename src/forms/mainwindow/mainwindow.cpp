@@ -24,6 +24,7 @@
 #include "pagecreate.h"
 #include "pageedit.h"
 #include "pageprocess.h"
+#include "pagecompleted.h"
 
 #include "settings.h"
 
@@ -38,14 +39,16 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedSize(this->width(), this->height());
     this->setWindowTitle("AVPStudio - Welcome");
 
-    PageWelcome *pageWelcome = new PageWelcome;
+    PageWelcome *pageWelcome = new PageWelcome(this);
     ui->stackedWidget->addWidget(pageWelcome);
-    PageCreate *pageCreate = new PageCreate;
+    PageCreate *pageCreate = new PageCreate(this);
     ui->stackedWidget->addWidget(pageCreate);
-    PageEdit *pageEdit = new PageEdit;
+    PageEdit *pageEdit = new PageEdit(this);
     ui->stackedWidget->addWidget(pageEdit);
-    PageProcess *pageProcess = new PageProcess;
+    PageProcess *pageProcess = new PageProcess(this);
     ui->stackedWidget->addWidget(pageProcess);
+    PageCompleted *pageCompleted = new PageCompleted(this);
+    ui->stackedWidget->addWidget(pageCompleted);
     ui->stackedWidget->setCurrentIndex(0);
 
     connect(pageWelcome, SIGNAL(createContent()), this, SLOT(do_createContent()));
@@ -54,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pageCreate, SIGNAL(editContent()), pageEdit, SLOT(do_init()));
     connect(pageEdit, SIGNAL(toProcess()), this, SLOT(do_toProcess()));
     connect(pageProcess, SIGNAL(reInit()), this, SLOT(on_actionNewContent_triggered()));
+    connect(pageCompleted, SIGNAL(reInit()), this, SLOT(on_actionNewContent_triggered()));
     connect(this, SIGNAL(toProcess()), pageProcess, SLOT(do_proc()));
     connect(this, SIGNAL(openFile(QString)), pageCreate, SLOT(on_labelDragText_linkActivated(QString)));
 }
@@ -84,6 +88,13 @@ void MainWindow::do_toProcess()
     emit toProcess();
 }
 
+void MainWindow::do_toCompleted(bool isError, QString errorStr)
+{
+    PageCompleted *pageCompleted = qobject_cast<PageCompleted*>(ui->stackedWidget->widget(4));
+    pageCompleted->setStatus(isError, errorStr);
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
 void MainWindow::on_actionAbout_triggered()
 {
     AboutWindow *aboutWindow = new AboutWindow();
@@ -100,6 +111,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionNewContent_triggered()
 {
+    setWindowTitle("AVPStudio - Welcome");
     ui->stackedWidget->setCurrentIndex(0);
     ui->actionNewContent->setEnabled(true);
     ui->actionOpenFile->setEnabled(false);

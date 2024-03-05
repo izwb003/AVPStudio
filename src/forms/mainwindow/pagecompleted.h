@@ -15,39 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef PAGEPROCESS_H
-#define PAGEPROCESS_H
-
-#include "doprocess.h"
+#ifndef PAGECOMPLETED_H
+#define PAGECOMPLETED_H
 
 #include <QWidget>
 
 namespace Ui {
-class PageProcess;
+class PageCompleted;
 }
 
-class PageProcess : public QWidget
+class PageCompleted : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PageProcess(QWidget *parent = nullptr);
-    ~PageProcess();
+    explicit PageCompleted(QWidget *parent = nullptr);
+    ~PageCompleted();
+
+    void setStatus(bool isError, QString errorStr);
 
 signals:
-    void terminate();
     void reInit();
 
-private:
-    Ui::PageProcess *ui;
-    TDoProcess *doProcessThread;
-
 private slots:
-    void do_proc();
-    void do_setProgressMax(int64_t num);
-    void do_setProgress(int64_t num);
-    void do_setLabel(QString str);
-    void on_pushButtonCancel_clicked();
+    void on_pushButtonOK_clicked();
+
+private:
+    Ui::PageCompleted *ui;
 };
 
-#endif // PAGEPROCESS_H
+#endif // PAGECOMPLETED_H

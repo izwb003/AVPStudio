@@ -18,8 +18,6 @@
 #include "pageprocess.h"
 #include "ui_pageprocess.h"
 
-#include "settings.h"
-
 PageProcess::PageProcess(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::PageProcess)
@@ -36,9 +34,11 @@ void PageProcess::do_proc()
 {
     doProcessThread = new TDoProcess(this);
 
+    connect(this, SIGNAL(terminate()), doProcessThread, SLOT(terminate()));
     connect(doProcessThread, SIGNAL(setProgressMax(int64_t)), this, SLOT(do_setProgressMax(int64_t)));
     connect(doProcessThread, SIGNAL(setProgress(int64_t)), this, SLOT(do_setProgress(int64_t)));
     connect(doProcessThread, SIGNAL(setLabel(QString)), this, SLOT(do_setLabel(QString)));
+    connect(doProcessThread, SIGNAL(completed(bool,QString)), this->window(), SLOT(do_toCompleted(bool, QString)));
 
     doProcessThread->start();
 }
@@ -60,7 +60,7 @@ void PageProcess::do_setLabel(QString str)
 
 void PageProcess::on_pushButtonCancel_clicked()
 {
-    doProcessThread->exit(-1);
+    emit terminate();
     while(true)
     {
         if(!doProcessThread->isRunning())

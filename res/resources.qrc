@@ -16,6 +16,8 @@
         <file>images/switch-on.png</file>
         <file>images/pause.png</file>
         <file>images/play.png</file>
+        <file>images/completed.png</file>
+        <file>images/error.png</file>
     </qresource>
     <qresource prefix="/texts">
         <file>texts/aboutinfo_zh_CN.md</file>

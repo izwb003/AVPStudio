@@ -46,6 +46,7 @@ private slots:
     void do_createContent();
     void do_editContent();
     void do_toProcess();
+    void do_toCompleted(bool isError, QString errorStr);
     void on_actionAbout_triggered();
     void on_actionExit_triggered();
     void on_actionNewContent_triggered();
