@@ -29,6 +29,7 @@
 #include "settings.h"
 
 #include <QDebug>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -121,5 +122,13 @@ void MainWindow::on_actionNewContent_triggered()
 void MainWindow::on_actionOpenFile_triggered()
 {
     emit openFile("");
+}
+
+
+void MainWindow::on_actionWavGenerator_triggered()
+{
+    QProcess *wavGeneratorProcess = new QProcess(this);
+    wavGeneratorProcess -> startDetached("wavgenerator");
+    delete wavGeneratorProcess;
 }
 

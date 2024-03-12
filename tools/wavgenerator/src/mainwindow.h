@@ -15,11 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileInfo>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,22 +35,24 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-signals:
-    void openFile(QString link);
-    void toProcess();
+private slots:
+    void do_setProgressMax(int64_t num);
+
+    void do_setProgress(int64_t num);
+
+    void do_showError(QString errorStr, QString title);
+
+    void do_processFinished();
+
+    void on_pushButtonBrowseInputFile_clicked();
+
+    void on_pushButtonBrowseOutputFile_clicked();
+
+    void on_pushButtonConvert_clicked();
+
+    void on_checkBoxDolbyNaming_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-    void on_actionWavGenerator_triggered();
 };
 #endif // MAINWINDOW_H

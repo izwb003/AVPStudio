@@ -180,7 +180,7 @@ void PageEdit::on_pushButtonOutput_clicked()
         return;
     }
 
-    settings.outputFilePath = QFileDialog::getExistingDirectory(this, tr("选择保存位置..."), QDir::currentPath());
+    settings.outputFilePath = QFileDialog::getExistingDirectory(this, tr("选择保存位置..."), QDir::homePath());
     if(settings.outputFilePath == "")
         return;
 

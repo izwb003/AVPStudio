@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(AVPStudio VERSION 0.1.0 LANGUAGES CXX)
+project(AVPStudio VERSION 0.2.0 LANGUAGES CXX)
 
 # Necessary Qt settings
 set(CMAKE_AUTOUIC ON)
@@ -40,9 +40,6 @@ if(WIN32)
     )
 endif(WIN32)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${FORMS_DIRECTORY})
-
 #Pass version number
 add_definitions(
     /DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
@@ -55,16 +52,18 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AVPStudio
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        src/forms/mainwindow/pagecompleted.h src/forms/mainwindow/pagecompleted.cpp src/forms/mainwindow/pagecompleted.ui
-
     )
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 else()
     add_executable(AVPStudio
         ${PROJECT_SOURCES}
     )
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 endif()
+
+# Configure executable include rules
+target_include_directories(AVPStudio PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(AVPStudio PRIVATE ${FORMS_DIRECTORY})
 
 # MacOS settings for Qt < 6.1.0 (For Qt > 6.1.0 this is configured automatically)
 if(${QT_VERSION} VERSION_LESS 6.1.0)
@@ -111,8 +110,11 @@ target_link_libraries(AVPStudio PRIVATE
     ${LIBSWRESAMPLE_PATH}
 )
 
+# Build tools
+add_subdirectory(tools)
+
 # Set install rules
-install(TARGETS AVPStudio
+install(TARGETS AVPStudio wavgenerator
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

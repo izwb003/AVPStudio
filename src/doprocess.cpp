@@ -130,7 +130,7 @@ void TDoProcess::run()
 
     // Open input file and find stream info
     iVideoFmtCxt = avformat_alloc_context();
-    avError = avformat_open_input(&iVideoFmtCxt, settings.inputVideoPath.toLocal8Bit(), 0, 0);
+    avError = avformat_open_input(&iVideoFmtCxt, settings.inputVideoPath.toUtf8(), 0, 0);
     if(avError < 0)
     {
         avErrorMsg = tr("加载输入文件失败：打开视频文件出错。");
@@ -213,7 +213,7 @@ void TDoProcess::run()
     }
 
     // Create output format and stream
-    avError = avformat_alloc_output_context2(&oVideoFmtCxt, av_guess_format("mpeg2video", 0, 0), 0, QString(settings.outputFilePath + "/" + settings.getOutputVideoFinalName()).toLocal8Bit());
+    avError = avformat_alloc_output_context2(&oVideoFmtCxt, av_guess_format("mpeg2video", 0, 0), 0, QString(settings.outputFilePath + "/" + settings.getOutputVideoFinalName()).toUtf8());
     if(avError < 0)
     {
         avErrorMsg = tr("写入视频输出文件失败：无法创建输出上下文。");
@@ -231,7 +231,7 @@ void TDoProcess::run()
 
     if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
     {
-        avError = avformat_alloc_output_context2(&oAudioFmtCxt, 0, 0, QString(settings.outputFilePath + "/" + settings.getOutputAudioFinalName()).toLocal8Bit());
+        avError = avformat_alloc_output_context2(&oAudioFmtCxt, 0, 0, QString(settings.outputFilePath + "/" + settings.getOutputAudioFinalName()).toUtf8());
         if(avError < 0)
         {
             avErrorMsg = tr("写入音频输出文件失败：无法创建输出上下文。");
@@ -254,7 +254,7 @@ void TDoProcess::run()
         avErrorMsg = tr("写入视频输出文件失败：无法打开视频编码器。");
         goto end;
     }
-    avError = avio_open(&oVideoFmtCxt->pb, QString(settings.outputFilePath + "/" + settings.getOutputVideoFinalName()).toLocal8Bit(), AVIO_FLAG_WRITE);
+    avError = avio_open(&oVideoFmtCxt->pb, QString(settings.outputFilePath + "/" + settings.getOutputVideoFinalName()).toUtf8(), AVIO_FLAG_WRITE);
     if(avError < 0)
     {
         avErrorMsg = tr("写入视频输出文件失败：无法打开视频输出I/O。");
@@ -275,7 +275,7 @@ void TDoProcess::run()
             avErrorMsg = tr("写入音频输出文件失败：无法打开音频编码器。");
             goto end;
         }
-        avError = avio_open(&oAudioFmtCxt->pb, QString(settings.outputFilePath + "/" + settings.getOutputAudioFinalName()).toLocal8Bit(), AVIO_FLAG_WRITE);
+        avError = avio_open(&oAudioFmtCxt->pb, QString(settings.outputFilePath + "/" + settings.getOutputAudioFinalName()).toUtf8(), AVIO_FLAG_WRITE);
         if(avError < 0)
         {
             avErrorMsg = tr("写入音频输出文件失败：无法打开音频输出I/O。");
@@ -344,19 +344,19 @@ void TDoProcess::run()
             switch(settings.size)
             {
             case AVP::kAVPLargeSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 5.71)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 5.71) / 2) - (iVideoDecoderCxt->width / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 5.71)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 5.71) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPMediumSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 4.29)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 4.29) / 2) - (iVideoDecoderCxt->width / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 4.29)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 4.29) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPSmallSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 2.62)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 2.62) / 2) - (iVideoDecoderCxt->width / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 2.62)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 2.62) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             }
         }
@@ -365,19 +365,19 @@ void TDoProcess::run()
             switch(settings.size)
             {
             case AVP::kAVPLargeSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.175).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.175) / 2) - (iVideoDecoderCxt->height / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.175).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.175) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPMediumSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.233).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.233) / 2) - (iVideoDecoderCxt->height / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.233).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.233) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPSmallSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.382).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.382) / 2) - (iVideoDecoderCxt->height / 2)).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.382).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.382) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             }
         }
@@ -445,7 +445,7 @@ void TDoProcess::run()
 
         volumeFilter = avfilter_get_by_name("volume");
         volumeFilterCxt = avfilter_graph_alloc_filter(volumeFilterGraph, volumeFilter, "volume");
-        avError = av_opt_set(volumeFilterCxt, "volume", QString::number(settings.outputVolume / 100.0, 'f', 2).toLocal8Bit(), AV_OPT_SEARCH_CHILDREN);
+        avError = av_opt_set(volumeFilterCxt, "volume", QString::number(settings.outputVolume / 100.0, 'f', 2).toUtf8(), AV_OPT_SEARCH_CHILDREN);
         avError = avfilter_init_str(volumeFilterCxt, 0);
 
         volumeFilterSink = avfilter_get_by_name("abuffersink");
@@ -462,7 +462,7 @@ void TDoProcess::run()
         avError = avfilter_graph_config(volumeFilterGraph, 0);
 
         // Set resampler
-        avError = swr_alloc_set_opts2(&resamplerCxt, &iAudioDecoderCxt->ch_layout, AV_SAMPLE_FMT_S32, 48000, &iAudioDecoderCxt->ch_layout, iAudioDecoderCxt->sample_fmt, iAudioDecoderCxt->sample_rate, 0, 0);
+        avError = swr_alloc_set_opts2(&resamplerCxt, &iAudioDecoderCxt->ch_layout, AV_SAMPLE_FMT_S32, iAudioDecoderCxt->sample_rate, &iAudioDecoderCxt->ch_layout, iAudioDecoderCxt->sample_fmt, iAudioDecoderCxt->sample_rate, 0, 0);
         avError = swr_init(resamplerCxt);
 
         while(av_read_frame(iVideoFmtCxt, packet) == 0)
@@ -482,14 +482,14 @@ void TDoProcess::run()
                     aFrameOut -> ch_layout = aFrameIn -> ch_layout;
                     aFrameOut -> sample_rate = aFrameIn -> sample_rate;
                     aFrameOut -> format = AV_SAMPLE_FMT_S32;
-                    aFrameOut -> nb_samples = av_rescale_rnd(swr_get_delay(resamplerCxt, 48000) + aFrameIn->nb_samples, 48000, iAudioDecoderCxt->sample_rate, AV_ROUND_UP);
-                    aFrameOut -> pts = aFrameIn -> pts;
+                    aFrameOut -> nb_samples = av_rescale_rnd(swr_get_delay(resamplerCxt, iAudioDecoderCxt->sample_rate) + aFrameIn->nb_samples, iAudioDecoderCxt->sample_rate, iAudioDecoderCxt->sample_rate, AV_ROUND_UP);
 
                     // Apply volume filter
                     avError = av_buffersrc_add_frame(volumeFilterSrcCxt, aFrameIn);
                     avError = av_buffersink_get_frame(volumeFilterSinkCxt, aFrameFiltered);
 
                     // Resample
+                    avError = swr_config_frame(resamplerCxt, aFrameOut, aFrameFiltered);
                     avError = swr_convert_frame(resamplerCxt, aFrameOut, aFrameFiltered);
 
                     // Encode
