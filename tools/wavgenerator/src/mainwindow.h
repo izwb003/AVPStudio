@@ -19,6 +19,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileInfo>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,6 +34,23 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+private slots:
+    void do_setProgressMax(int64_t num);
+
+    void do_setProgress(int64_t num);
+
+    void do_showError(QString errorStr, QString title);
+
+    void do_processFinished();
+
+    void on_pushButtonBrowseInputFile_clicked();
+
+    void on_pushButtonBrowseOutputFile_clicked();
+
+    void on_pushButtonConvert_clicked();
+
+    void on_checkBoxDolbyNaming_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;

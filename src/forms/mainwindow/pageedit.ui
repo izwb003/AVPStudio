@@ -194,8 +194,14 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBoxPadding">
+                <property name="toolTip">
+                 <string>若输入内容同预设尺寸分辨率相同，建议保持该选项开启。</string>
+                </property>
                 <property name="text">
                  <string>拉伸画面以填充</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>

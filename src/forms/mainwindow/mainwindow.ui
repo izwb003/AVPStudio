@@ -52,7 +52,7 @@
     <property name="title">
      <string>工具(&amp;T)</string>
     </property>
-    <addaction name="actionTemp"/>
+    <addaction name="actionWavGenerator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_T"/>
@@ -90,12 +90,12 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionTemp">
+  <action name="actionWavGenerator">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>（暂无）</string>
+    <string>WAV生成器</string>
    </property>
   </action>
  </widget>

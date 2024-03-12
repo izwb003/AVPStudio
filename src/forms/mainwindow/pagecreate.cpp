@@ -92,7 +92,7 @@ void PageCreate::do_init()
 
 void PageCreate::on_labelDragText_linkActivated(const QString &link)
 {
-    settings.inputVideoPath = QFileDialog::getOpenFileName(this, tr("选择素材文件..."), QDir::currentPath(), tr("视频文件 (*.mp4 *.mpg *.avi *.mkv *.mov *.flv)"));
+    settings.inputVideoPath = QFileDialog::getOpenFileName(this, tr("选择素材文件..."), QDir::homePath(), tr("视频文件 (*.mp4 *.mpg *.avi *.mkv *.mov *.flv)"));
     settings.inputVideoInfo.setFile(settings.inputVideoPath);
     if(!settings.inputVideoPath.isEmpty())
         emit editContent();

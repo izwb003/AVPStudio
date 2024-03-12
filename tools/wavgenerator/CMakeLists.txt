@@ -27,6 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(wavgenerator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/genprocess.h src/genprocess.cpp
     )
     qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 else()
@@ -42,6 +43,7 @@ target_link_libraries(wavgenerator PRIVATE
     ${LIBAVUTIL_PATH}
     ${LIBAVCODEC_PATH}
     ${LIBAVFORMAT_PATH}
+    ${LIBAVFILTER_PATH}
     ${LIBSWRESAMPLE_PATH}
 )
 

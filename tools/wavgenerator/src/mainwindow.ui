@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>608</width>
-    <height>600</height>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,16 +17,138 @@
    <iconset resource="../../../res/resources.qrc">
     <normaloff>:/icons/icons/wavgenerator_icon256.ico</normaloff>:/icons/icons/wavgenerator_icon256.ico</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>608</width>
-     <height>21</height>
-    </rect>
-   </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBoxFile">
+      <property name="title">
+       <string>文件</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutInput">
+         <item>
+          <widget class="QLabel" name="labelInputFile">
+           <property name="text">
+            <string>输入文件：</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEditInputFile</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditInputFile"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonBrowseInputFile">
+           <property name="text">
+            <string>浏览...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutOutput">
+         <item>
+          <widget class="QLabel" name="labelOutputFile">
+           <property name="text">
+            <string>输出文件：</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEditOutputFile</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditOutputFile"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonBrowseOutputFile">
+           <property name="text">
+            <string>浏览...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutButtons" stretch="2,1,1,0,1,1">
+      <item>
+       <widget class="QCheckBox" name="checkBoxDolbyNaming">
+        <property name="text">
+         <string>为输出文件使用杜比命名</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelVolume">
+        <property name="text">
+         <string>输出音量（百分比）：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBoxVolume">
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonConvert">
+        <property name="text">
+         <string>生成WAV...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonCancel">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>取消...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutProgress">
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="textVisible">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -15,42 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TGENPROCESS_H
+#define TGENPROCESS_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QThread>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
+class TGenProcess : public QThread
 {
     Q_OBJECT
-
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit TGenProcess(QObject *parent = nullptr, QString inputFilePath = "", QString outputFilePath = "", int volumePercent = 100);
+
+    QString inputFilePath;
+    QString outputFilePath;
+    int volumePercent;
+
+protected:
+    void run();
 
 signals:
-    void openFile(QString link);
-    void toProcess();
-
-private:
-    Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-    void on_actionWavGenerator_triggered();
+    void setProgressMax(int64_t num);
+    void setProgress(int64_t num);
+    void showError(QString errorStr, QString title);
 };
-#endif // MAINWINDOW_H
+
+#endif // TGENPROCESS_H
