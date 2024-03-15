@@ -3,3 +3,4 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
 # Add tools
 add_subdirectory(wavgenerator)
+add_subdirectory(imageorganizer)

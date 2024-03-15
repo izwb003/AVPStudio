@@ -53,6 +53,10 @@ void MainWindow::do_setProgress(int64_t num)
 
 void MainWindow::do_showError(QString errorStr, QString title)
 {
+    ui->statusbar->showMessage(tr("错误"));
+    this->setWindowTitle("AVPStudio WAVGenerator");
+    ui->pushButtonConvert->setEnabled(true);
+    ui->pushButtonCancel->setEnabled(false);
     QMessageBox::critical(this, title, errorStr);
 }
 
@@ -101,7 +105,7 @@ void MainWindow::on_pushButtonConvert_clicked()
     connect(genProcess, SIGNAL(setProgressMax(int64_t)), this, SLOT(do_setProgressMax(int64_t)));
     connect(genProcess, SIGNAL(setProgress(int64_t)), this, SLOT(do_setProgress(int64_t)));
     connect(genProcess, SIGNAL(finished()), this, SLOT(do_processFinished()));
-    connect(genProcess, SIGNAL(showError(QString, QString)), this, SLOT(do_showError(QString,QString)));
+    connect(genProcess, SIGNAL(showError(QString,QString)), this, SLOT(do_showError(QString,QString)));
     connect(genProcess, &QThread::finished, genProcess, &QObject::deleteLater);
 
     ui->statusbar->showMessage(tr("正在生成") + outputFileInfo.fileName() + "...");

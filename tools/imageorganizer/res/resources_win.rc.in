@@ -6,7 +6,7 @@
 #define PRODUCT_VERSION          @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
 #define PRODUCT_VERSION_STR      "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0\0"
 
-IDI_ICON1    ICON    DISCARDABLE    "@CMAKE_SOURCE_DIR@/res/icons/wavgenerator_icon256.ico"
+IDI_ICON1    ICON    DISCARDABLE    "@CMAKE_SOURCE_DIR@/res/icons/imageorganizer_icon256.ico"
 
 VS_VERSION_INFO VERSIONINFO
     FILEVERSION    FILE_VERSION
@@ -26,11 +26,11 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "izwb003 Productions\0"
-            // VALUE "FileDescription", "AVPStudio WAVGenerator, Dolby Cinema signature entrance (AVP) audio content production tool.\0"
+            // VALUE "FileDescription", "AVPStudio ImageOrganizer, Dolby Cinema signature entrance (AVP) static image content production tool.\0"
             VALUE "FileVersion", FILE_VERSION_STR
-            VALUE "InternalName", "wavgenerator.exe\0"
+            VALUE "InternalName", "imageorganizer.exe\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 Steven Song (izwb003)\0"
-            VALUE "OriginalFilename", "wavgenerator.exe\0"
+            VALUE "OriginalFilename", "imageorganizer.exe\0"
             VALUE "ProductName", "AVP Studio\0"
             VALUE "ProductVersion", PRODUCT_VERSION_STR
         END

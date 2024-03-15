@@ -59,6 +59,14 @@ static const char *filterGraphSmall =
     "[padded2]crop=3840:1080:2327:0[right];"
     "[left][right]vstack=2[out]";
 
+template<typename T> int toUpperInt(T val)
+{
+    if((int)val % 2 == 1)
+        return (int)val + 1;
+    else
+        return (int)val;
+}
+
 TDoProcess::TDoProcess(QObject *parent) {}
 
 void TDoProcess::run()
@@ -337,6 +345,18 @@ void TDoProcess::run()
     }
 
     videoFilterPadCxt = avfilter_graph_get_filter(videoFilterGraph, "Parsed_pad_0");
+
+    /*
+     * Special note to this fix:
+     * Although most video tools will generate videos that has an even width/height, some of the videos may have an odd width/height.
+     * The "pad" filter receives an odd size and automatically rounds down to an even number. If the rounded size is smaller than the size of the input image, the filter system will throw an exception.
+     * So it is necessary to manually adjust the parameters of the incoming "pad" filter to accept even data with a larger size than the input content.
+     */
+    avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->width)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+    avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->height)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+    if(iVideoDecoderCxt->width == settings.getWidth() && iVideoDecoderCxt->height == 1080)
+        settings.scalePicture = false;
+
     if(!settings.scalePicture)
     {
         if((iVideoDecoderCxt->width / iVideoDecoderCxt->height) < (settings.getWidth() / 1080))
@@ -344,19 +364,19 @@ void TDoProcess::run()
             switch(settings.size)
             {
             case AVP::kAVPLargeSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 5.71)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 5.71) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->height * 5.71)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->height)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(toUpperInt(((iVideoDecoderCxt->height * 5.71) / 2) - (iVideoDecoderCxt->width / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPMediumSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 4.29)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 4.29) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->height * 4.29)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->height)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(toUpperInt(((iVideoDecoderCxt->height * 4.29) / 2) - (iVideoDecoderCxt->width / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPSmallSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number((int)(iVideoDecoderCxt->height * 2.62)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(iVideoDecoderCxt->height).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(((int)(iVideoDecoderCxt->height * 2.62) / 2) - (iVideoDecoderCxt->width / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->height * 2.62)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->height)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "x", QString::number(toUpperInt(((iVideoDecoderCxt->height * 2.62) / 2) - (iVideoDecoderCxt->width / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             }
         }
@@ -365,25 +385,30 @@ void TDoProcess::run()
             switch(settings.size)
             {
             case AVP::kAVPLargeSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.175).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.175) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->width)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->width * 0.175)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(toUpperInt(((iVideoDecoderCxt->width * 0.175) / 2) - (iVideoDecoderCxt->height / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPMediumSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.233).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.233) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->width)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->width * 0.233)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(toUpperInt(((iVideoDecoderCxt->width * 0.233) / 2) - (iVideoDecoderCxt->height / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             case AVP::kAVPSmallSize:
-                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(iVideoDecoderCxt->width).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "height", QString::number((int)iVideoDecoderCxt->width * 0.382).toUtf8(), AV_OPT_SEARCH_CHILDREN);
-                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(((int)(iVideoDecoderCxt->width * 0.382) / 2) - (iVideoDecoderCxt->height / 2)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "width", QString::number(toUpperInt(iVideoDecoderCxt->width)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "height", QString::number(toUpperInt(iVideoDecoderCxt->width * 0.382)).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+                avError = av_opt_set(videoFilterPadCxt, "y", QString::number(toUpperInt(((iVideoDecoderCxt->width * 0.382) / 2) - (iVideoDecoderCxt->height / 2))).toUtf8(), AV_OPT_SEARCH_CHILDREN);
                 break;
             }
         }
     }
 
     avError = avfilter_graph_config(videoFilterGraph, 0);
+    if(avError < 0)
+    {
+        avErrorMsg = tr("转换失败：不能创建滤镜链。");
+        goto end;
+    }
 
     // Set YUV422 rescaler
     scale422Cxt = sws_getContext(3840, 2160, iVideoDecoderCxt->pix_fmt, 3840, 2160, AV_PIX_FMT_YUV422P, SWS_FAST_BILINEAR, 0, 0, 0);
