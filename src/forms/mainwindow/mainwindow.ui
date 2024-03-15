@@ -53,6 +53,7 @@
      <string>工具(&amp;T)</string>
     </property>
     <addaction name="actionWavGenerator"/>
+    <addaction name="action"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_T"/>
@@ -96,6 +97,11 @@
    </property>
    <property name="text">
     <string>WAV生成器</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>图片排列器</string>
    </property>
   </action>
  </widget>

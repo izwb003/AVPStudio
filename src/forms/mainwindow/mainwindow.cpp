@@ -132,3 +132,11 @@ void MainWindow::on_actionWavGenerator_triggered()
     delete wavGeneratorProcess;
 }
 
+
+void MainWindow::on_action_triggered()
+{
+    QProcess *imageOrganizerProcess = new QProcess(this);
+    imageOrganizerProcess -> startDetached("imageorganizer");
+    delete imageOrganizerProcess;
+}
+

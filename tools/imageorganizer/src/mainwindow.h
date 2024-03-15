@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -27,6 +26,14 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+namespace AVP {
+enum AVPSize {
+    kAVPSmallSize,
+    kAVPMediumSize,
+    kAVPLargeSize
+};
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -35,23 +42,40 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-signals:
-    void openFile(QString link);
-    void toProcess();
+private slots:
+    void on_radioButtonSmallSize_clicked(bool checked);
+
+    void on_radioButtonMediumSize_clicked(bool checked);
+
+    void on_radioButtonLargeSize_clicked(bool checked);
+
+    void on_pushButtonQuit_clicked();
+
+    void on_checkBoxExtend_stateChanged(int arg1);
+
+    void on_checkBoxDolbyNaming_stateChanged(int arg1);
+
+    void on_pushButtonInBrowse_clicked();
+
+    void on_lineEditInPath_editingFinished();
+
+    void on_pushButtonConvert_clicked();
 
 private:
     Ui::MainWindow *ui;
 
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-    void on_actionWavGenerator_triggered();
-    void on_action_triggered();
+    void doConversion();
+
+    struct
+    {
+        AVP::AVPSize size = AVP::kAVPMediumSize;
+        int width = 4633;
+        int height = 1080;
+        QString fileInputPath = "";
+        QString fileOutputPath = "";
+        bool isDolbyNaming = true;
+        bool isExtended = true;
+    }
+    settings;
 };
 #endif // MAINWINDOW_H
