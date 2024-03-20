@@ -67,6 +67,8 @@ template<typename T> int toUpperInt(T val)
         return (int)val;
 }
 
+// TODO: Fix fps problem.
+
 TDoProcess::TDoProcess(QObject *parent) {}
 
 void TDoProcess::run()
@@ -153,7 +155,7 @@ void TDoProcess::run()
 
     // Get input video and audio stream
     iVideoStreamID = av_find_best_stream(iVideoFmtCxt, AVMEDIA_TYPE_VIDEO, -1, -1, &iVideoDecoder, 0);
-    if(avError < 0)
+    if(iVideoStreamID == AVERROR_STREAM_NOT_FOUND)
     {
         avErrorMsg = tr("加载输入文件失败：找不到视频流。");
         goto end;
@@ -235,7 +237,7 @@ void TDoProcess::run()
         goto end;
     }
     oVideoStream -> time_base = oVideoEncoderCxt->time_base;
-    oVideoStream ->r_frame_rate = settings.outputFrameRate;
+    oVideoStream -> r_frame_rate = settings.outputFrameRate;
 
     if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
     {
@@ -572,6 +574,10 @@ end:    // Jump flag for errors
     av_frame_free(&vFrameFiltered);
     av_frame_free(&vFrameOut);
 
+    avfilter_free(videoFilterSrcCxt);
+    avfilter_free(videoFilterSinkCxt);
+    avfilter_free(videoFilterPadCxt);
+
     avfilter_graph_free(&videoFilterGraph);
     avfilter_inout_free(&videoFilterInput);
     avfilter_inout_free(&videoFilterOutput);
@@ -582,6 +588,9 @@ end:    // Jump flag for errors
     av_frame_free(&aFrameFiltered);
     av_frame_free(&aFrameOut);
 
+    avfilter_free(volumeFilterSrcCxt);
+    avfilter_free(volumeFilterSinkCxt);
+    avfilter_free(volumeFilterCxt);
     avfilter_graph_free(&volumeFilterGraph);
 
     swr_free(&resamplerCxt);

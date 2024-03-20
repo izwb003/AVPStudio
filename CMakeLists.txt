@@ -1,6 +1,39 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.18)
 
 project(AVPStudio VERSION 0.2.0 LANGUAGES CXX)
+
+# Link ffmpeg
+if(WIN32)
+    set(FFMPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg)
+    set(FFMPEG_VERSION 6.1.1)
+
+    # Download ffmpeg gyan.dev builds from GitHub
+    if(NOT EXISTS ${FFMPEG_PATH})
+        file(DOWNLOAD
+            https://github.com/GyanD/codexffmpeg/releases/download/${FFMPEG_VERSION}/ffmpeg-${FFMPEG_VERSION}-full_build-shared.zip
+            ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg.zip
+            SHOW_PROGRESS
+        )
+        file(ARCHIVE_EXTRACT
+            INPUT ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg.zip
+            DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/external
+        )
+        file(RENAME
+            ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg-${FFMPEG_VERSION}-full_build-shared
+            ${FFMPEG_PATH}
+        )
+        file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg.zip)
+    endif()
+endif(WIN32)
+
+find_library(LIBAVUTIL_PATH avutil ${FFMPEG_PATH}/lib)
+find_library(LIBAVCODEC_PATH avcodec ${FFMPEG_PATH}/lib)
+find_library(LIBAVFORMAT_PATH avformat ${FFMPEG_PATH}/lib)
+find_library(LIBAVFILTER_PATH avfilter ${FFMPEG_PATH}/lib)
+find_library(LIBSWSCALE_PATH swscale ${FFMPEG_PATH}/lib)
+find_library(LIBSWRESAMPLE_PATH swresample ${FFMPEG_PATH}/lib)
+
+include_directories(${FFMPEG_PATH}/include)
 
 # Necessary Qt settings
 set(CMAKE_AUTOUIC ON)
@@ -82,20 +115,6 @@ set_target_properties(AVPStudio PROPERTIES
 # GNU include
 include(GNUInstallDirs)
 
-# Link ffmpeg
-if(WIN32)
-    set(FFMPEG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/ffmpeg)
-endif(WIN32)
-
-find_library(LIBAVUTIL_PATH avutil ${FFMPEG_PATH}/lib)
-find_library(LIBAVCODEC_PATH avcodec ${FFMPEG_PATH}/lib)
-find_library(LIBAVFORMAT_PATH avformat ${FFMPEG_PATH}/lib)
-find_library(LIBAVFILTER_PATH avfilter ${FFMPEG_PATH}/lib)
-find_library(LIBSWSCALE_PATH swscale ${FFMPEG_PATH}/lib)
-find_library(LIBSWRESAMPLE_PATH swresample ${FFMPEG_PATH}/lib)
-
-include_directories(${FFMPEG_PATH}/include)
-
 # Link libraries
 target_link_libraries(AVPStudio PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -113,7 +132,7 @@ target_link_libraries(AVPStudio PRIVATE
 add_subdirectory(tools)
 
 # Set install rules
-install(TARGETS AVPStudio wavgenerator
+install(TARGETS AVPStudio wavgenerator imageorganizer mxlplayer
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

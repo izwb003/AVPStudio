@@ -15,11 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QProgressBar>
+#include <QProgressDialog>
+
+#include "doexport.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,24 +38,27 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-signals:
-    void openFile(QString link);
-    void toProcess();
+private slots:
+    void do_showError(QString errorTitle, QString errorMsg);
+
+    void do_completed();
+
+    void do_canceled();
+
+    void on_pushButtonExportMP4_clicked();
+
+    void on_pushButtonMXLBrowse_clicked();
+
+    void on_pushButtonWAVBrowse_clicked();
 
 private:
     Ui::MainWindow *ui;
 
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-    void on_actionWavGenerator_triggered();
-    void on_actionImageOrganizer_triggered();
-    void on_actionMXLPlayer_triggered();
+    TDoExport *doExport;
+
+    QProgressBar *progressDialogBar;
+    QProgressDialog *progressDialog;
+
+    AVP::AVPSize getSize();
 };
 #endif // MAINWINDOW_H

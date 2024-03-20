@@ -18,6 +18,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "genprocess.h"
+
 #include <QMainWindow>
 #include <QFileInfo>
 
@@ -52,7 +54,11 @@ private slots:
 
     void on_checkBoxDolbyNaming_stateChanged(int arg1);
 
+    void on_pushButtonCancel_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    TGenProcess *genProcess;
 };
 #endif // MAINWINDOW_H

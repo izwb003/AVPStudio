@@ -53,7 +53,8 @@
      <string>工具(&amp;T)</string>
     </property>
     <addaction name="actionWavGenerator"/>
-    <addaction name="action"/>
+    <addaction name="actionImageOrganizer"/>
+    <addaction name="actionMXLPlayer"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_T"/>
@@ -95,13 +96,30 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/wavgenerator_icon256.ico</normaloff>:/icons/icons/wavgenerator_icon256.ico</iconset>
+   </property>
    <property name="text">
     <string>WAV生成器</string>
    </property>
   </action>
-  <action name="action">
+  <action name="actionImageOrganizer">
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/imageorganizer_icon256.ico</normaloff>:/icons/icons/imageorganizer_icon256.ico</iconset>
+   </property>
    <property name="text">
     <string>图片排列器</string>
+   </property>
+  </action>
+  <action name="actionMXLPlayer">
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/mxlplayer_icon256.ico</normaloff>:/icons/icons/mxlplayer_icon256.ico</iconset>
+   </property>
+   <property name="text">
+    <string>MXL播放器</string>
    </property>
   </action>
  </widget>

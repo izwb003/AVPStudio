@@ -1,0 +1,42 @@
+#include "winver.h"
+
+#define FILE_VERSION             @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+#define FILE_VERSION_STR         "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0\0"
+
+#define PRODUCT_VERSION          @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+#define PRODUCT_VERSION_STR      "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0\0"
+
+IDI_ICON1    ICON    DISCARDABLE    "@CMAKE_SOURCE_DIR@/res/icons/mxlplayer_icon256.ico"
+
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION    FILE_VERSION
+    PRODUCTVERSION PRODUCT_VERSION
+#ifdef DEBUG
+    FILEFLAGS      VS_FF_DEBUG
+#else
+    FILEFLAGS      VS_FFI_FILEFLAGSMASK
+#endif
+    FILEFLAGSMASK  0x3fL
+    FILEOS         VOS_NT_WINDOWS32
+    FILETYPE       VFT_APP
+    FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "izwb003 Productions\0"
+            // VALUE "FileDescription", "AVPStudio MXLPlayer, Dolby Cinema signature entrance (AVP) display content player.\0"
+            VALUE "FileVersion", FILE_VERSION_STR
+            VALUE "InternalName", "mxlplayer.exe\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 Steven Song (izwb003)\0"
+            VALUE "OriginalFilename", "mxlplayer.exe\0"
+            VALUE "ProductName", "AVP Studio\0"
+            VALUE "ProductVersion", PRODUCT_VERSION_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END

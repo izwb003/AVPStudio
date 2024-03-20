@@ -15,44 +15,44 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TDOEXPORT_H
+#define TDOEXPORT_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include <QThread>
 
-#include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
+namespace AVP {
+enum AVPSize {
+    kAVPSmallSize,
+    kAVPMediumSize,
+    kAVPLargeSize
+};
 }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class TDoExport : public QThread
 {
     Q_OBJECT
-
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit TDoExport(QObject *parent = nullptr, QString mxlPath = "", QString wavPath = "", QString videoPath = "", AVP::AVPSize size = AVP::kAVPMediumSize);
 
 signals:
-    void openFile(QString link);
-    void toProcess();
+    void showError(QString errorTitle, QString errorMsg);
+
+    void setProgressText(QString text);
+
+    void setProgressMax(int val);
+
+    void setProgress(int val);
+
+    void completed();
+
+protected:
+    void run();
 
 private:
-    Ui::MainWindow *ui;
-
-private slots:
-    void do_createContent();
-    void do_editContent();
-    void do_toProcess();
-    void do_toCompleted(bool isError, QString errorStr);
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
-    void on_actionNewContent_triggered();
-    void on_actionOpenFile_triggered();
-    void on_actionWavGenerator_triggered();
-    void on_actionImageOrganizer_triggered();
-    void on_actionMXLPlayer_triggered();
+    QString mxlPath = "";
+    QString wavPath = "";
+    QString videoPath = "";
+    AVP::AVPSize size = AVP::kAVPMediumSize;
 };
-#endif // MAINWINDOW_H
+
+#endif // TDOEXPORT_H

@@ -13,11 +13,11 @@ AVPStudio是一个编码工具。它可以将任意视频按照该预设的分�
 ### 素材准备
 杜比影院动态视听走廊具有三种不同的规格。三种规格的具体参数如下：
 
-|规格|尺寸|分辨率|音频轨道|
-|---|---|---|---|
-|Small|5.5m x 2.1m|2830W x 1080H|7.1 PCM Surround|
-|Medium|9m x 2.1m|4633W x 1080H|7.1 PCM Surround|
-|Large|12m x 2.1m|6167W x 1080H|7.1 PCM Surround|
+| 规格   | 尺寸        | 分辨率        | 音频轨道         |
+| ------ | ----------- | ------------- | ---------------- |
+| Small  | 5.5m x 2.1m | 2830W x 1080H | 7.1 PCM Surround |
+| Medium | 9m x 2.1m   | 4633W x 1080H | 7.1 PCM Surround |
+| Large  | 12m x 2.1m  | 6167W x 1080H | 7.1 PCM Surround |
 
 有关目标影院的具体规格，可向影院工作人员咨询。若对方无法透露准确信息，可自行对实际投影区域进行测量。
 
@@ -47,17 +47,32 @@ AVPStudio是一个编码工具。它可以将任意视频按照该预设的分�
 
 这样，通过将“![](images/pandorasbox_cue_mark.png)”拉至更远的位置（甚至视频末尾），即可让循环（cue）持续时间更长以避免中途返回开头。
 
+## 附加工具
+
+### AVPStudio ImageOrganizer
+用于将图片构建为符合杜比影院动态视听走廊分离画面的图片工具。
+
+若您的放映内容仅为单张静态图片，该工具可以省去制作视频的工作。
+
+### AVPStudio WAVGenerator
+用于生成音频WAV的工具。
+
+可搭配ImageOrganizer用于为图片放映内容添加背景音乐，亦可用于及时调整WAV音频的音量大小。
+
+### AVPStudio MXLPlayer
+MXL播放器。
+
+可播放转换完成的（或者官方的）mxl文件预览实际放映效果，亦可将mxl文件转换为H264 MP4视频。
+
 ## 技术信息
 
 ### 原理说明
 有关实现的具体原理及画面结构，请参阅[此专栏](https://www.bilibili.com/read/cv27334455/)。
 
 ### 构建说明
-截至目前，软件仅在Windows环境下调试并测试通过，尚未针对Linux及macOS环境进行配置。
+截至目前，软件仅在Windows环境下调试并测试通过，尚未针对Linux及macOS环境进行配置与调试。
 
-Windows环境下，请您在开始构建前提前编译ffmpeg库，或在[gyan.dev](https://www.gyan.dev/ffmpeg/builds/)等地下载预构建好的版本。
-
-在项目中新建```external/ffmpeg```文件夹，并将构建好的ffmpeg库拷贝到该文件夹中。确保其链接库（```.dll.a```；```.lib```等）可以在```external/ffmpeg/lib```下被查找到。
+CMake脚本已被调整为默认从互联网下载预构建ffmpeg。请确保构建时互联网连接畅通。您也可以参阅CMakeLists.txt自行配置外部库。
 
 构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets。
 
@@ -86,3 +101,9 @@ AVPStudio基于Qt许可证使用Qt6技术。
 AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软件。
 
 AVPStudio是在[GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1)下开放源代码的软件。
+
+## 附表 中华人民共和国大陆地区Dolby Cinema部分参数表（2023年7月）
+
+***网友制表，出处见水印。信息仅供参考。***
+
+![](images/cn_dbyc_list_202307.jpg)
