@@ -184,6 +184,13 @@ void PageEdit::on_pushButtonOutput_clicked()
     if(settings.outputFilePath == "")
         return;
 
+    if(QFileInfo::exists(settings.outputFilePath + "/" + settings.getOutputVideoFinalName()))
+        if(QMessageBox::question(this, tr("输出文件已存在"), tr("同名视频文件已存在。要覆盖吗？")) == QMessageBox::No)
+            return;
+    if(QFileInfo::exists(settings.outputFilePath + "/" + settings.getOutputAudioFinalName()))
+        if(QMessageBox::question(this, tr("输出文件已存在"), tr("同名音频文件已存在。要覆盖吗？")) == QMessageBox::No)
+            return;
+
     emit toProcess();
 }
 

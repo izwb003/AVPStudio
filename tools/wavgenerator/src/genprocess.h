@@ -37,6 +37,7 @@ signals:
     void setProgressMax(int64_t num);
     void setProgress(int64_t num);
     void showError(QString errorStr, QString title);
+    void completed();
 };
 
 #endif // TGENPROCESS_H

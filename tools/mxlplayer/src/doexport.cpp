@@ -116,7 +116,7 @@ void TDoExport::run()
     AVAudioFifo *aFifo = NULL;
     uint8_t **aSamples = NULL;
     int aSamplesLineSize;
-    int audioPTSCounter = 0;
+    uint64_t audioPTSCounter = 0;
 
     // Open input file and find stream info
     iVideoFmtCxt = avformat_alloc_context();

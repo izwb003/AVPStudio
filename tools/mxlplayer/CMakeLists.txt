@@ -39,6 +39,7 @@ endif()
 # Link libraries
 target_link_libraries(mxlplayer PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    SDL3::SDL3
     ${LIBAVUTIL_PATH}
     ${LIBAVFORMAT_PATH}
     ${LIBAVCODEC_PATH}

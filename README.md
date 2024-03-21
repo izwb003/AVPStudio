@@ -100,6 +100,8 @@ AVPStudio基于Qt许可证使用Qt6技术。
 
 AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软件。
 
+AVPStudio MXLPlayer基于zlib license使用来自[SDL](https://www.libsdl.org/)的软件。
+
 AVPStudio是在[GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1)下开放源代码的软件。
 
 ## 附表 中华人民共和国大陆地区Dolby Cinema部分参数表（2023年7月）

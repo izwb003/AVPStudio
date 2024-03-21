@@ -69,6 +69,8 @@ void TGenProcess::run()
 
     SwrContext *resamplerCxt = NULL;
 
+    uint64_t audioPTSCounter = 0;
+
     AVStream *oAudioStream = NULL;
     AVFormatContext *oAudioFmtCxt = NULL;
     const AVCodec *oAudioEncoder = NULL;
@@ -215,6 +217,10 @@ void TGenProcess::run()
                 avError = swr_config_frame(resamplerCxt, frameOutput, frameFiltered);
                 avError = swr_convert_frame(resamplerCxt, frameOutput, frameFiltered);
 
+                // Make timestamp
+                frameOutput -> pts = audioPTSCounter;
+                audioPTSCounter += oAudioEncoderCxt->frame_size;
+
                 // Encode
                 avError = avcodec_send_frame(oAudioEncoderCxt, frameOutput);
                 avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
@@ -252,7 +258,14 @@ end:    // Jump flag for errors
     av_frame_free(&frameFiltered);
     av_frame_free(&frameOutput);
 
+    avfilter_free(volumeFilterCxt);
+    avfilter_free(volumeFilterSrcCxt);
+    avfilter_free(volumeFilterSinkCxt);
+
     avfilter_graph_free(&volumeFilterGraph);
 
     swr_free(&resamplerCxt);
+
+    if(avError == 0)
+        emit completed();
 }

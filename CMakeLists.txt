@@ -35,6 +35,10 @@ find_library(LIBSWRESAMPLE_PATH swresample ${FFMPEG_PATH}/lib)
 
 include_directories(${FFMPEG_PATH}/include)
 
+# Link SDL
+add_subdirectory(external/SDL)
+include_directories(external/SDL/include)
+
 # Necessary Qt settings
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
