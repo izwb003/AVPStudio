@@ -401,7 +401,14 @@ void TDoExport::run()
                     packet -> stream_index = 0;
                     avError = av_interleaved_write_frame(oVideoFmtCxt, packet);
                 }
+
+                // Unref frames
+                av_frame_unref(vFrameIn);
+                av_frame_unref(vFrameFiltered);
+                av_frame_unref(vFrameOut);
             }
+            // Unref packet
+            av_packet_unref(packet);
         }
     }
 

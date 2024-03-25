@@ -21,6 +21,9 @@
         <file>images/play.png</file>
         <file>images/completed.png</file>
         <file>images/error.png</file>
+        <file>images/mute.png</file>
+        <file>images/volume.png</file>
+        <file>images/close.png</file>
     </qresource>
     <qresource prefix="/texts">
         <file>texts/aboutinfo_zh_CN.md</file>

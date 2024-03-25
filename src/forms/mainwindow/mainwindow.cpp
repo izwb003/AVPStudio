@@ -29,6 +29,7 @@
 #include "settings.h"
 
 #include <QDebug>
+#include <QDesktopServices>
 #include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -145,5 +146,17 @@ void MainWindow::on_actionMXLPlayer_triggered()
     QProcess *mxlPlayerProcess = new QProcess(this);
     mxlPlayerProcess -> startDetached("mxlplayer");
     delete mxlPlayerProcess;
+}
+
+
+void MainWindow::on_actionOpenSource_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio")));
+}
+
+
+void MainWindow::on_actionCheckUpdate_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio/releases")));
 }
 

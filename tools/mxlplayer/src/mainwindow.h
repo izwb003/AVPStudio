@@ -51,6 +51,8 @@ private slots:
 
     void on_pushButtonWAVBrowse_clicked();
 
+    void on_pushButtonPlay_clicked();
+
 private:
     Ui::MainWindow *ui;
 

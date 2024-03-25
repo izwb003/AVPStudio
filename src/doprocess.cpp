@@ -15,6 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/* To anyone who reads my code:
+ * I am not very familiar with multi-thread programming.
+ * I was sleeping when my teacher taught me these things.
+ * So I may have made some foolish mistakes in this regard, such as using terminate() extensively.
+ * If I have the opportunity to continue maintaining these codes in the future, perhaps I can use more enriched experience to correct them.
+ * But now, they are "usable" - limited to being "able to run", that's all.
+ */
+
 #include "doprocess.h"
 
 #include "settings.h"
@@ -455,8 +464,15 @@ void TDoProcess::run()
                     avError = avcodec_receive_packet(oVideoEncoderCxt, packet);
                     av_packet_rescale_ts(packet, oVideoEncoderCxt->time_base, oVideoFmtCxt->streams[0]->time_base);
                     avError = av_interleaved_write_frame(oVideoFmtCxt, packet);
+
+                    // Unref frame
+                    av_frame_unref(vFrameIn);
+                    av_frame_unref(vFrameFiltered);
+                    av_frame_unref(vFrameOut);
                 }
             }
+            // Unref packet
+            av_packet_unref(packet);
         }
     }
 
@@ -542,7 +558,14 @@ void TDoProcess::run()
                     avError = avcodec_send_frame(oAudioEncoderCxt, aFrameOut);
                     avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
                     avError = av_write_frame(oAudioFmtCxt, packet);
+
+                    // Unref frames
+                    av_frame_unref(aFrameIn);
+                    av_frame_unref(aFrameFiltered);
+                    av_frame_unref(aFrameOut);
                 }
+                // Unref packet
+                av_packet_unref(packet);
             }
         }
     }

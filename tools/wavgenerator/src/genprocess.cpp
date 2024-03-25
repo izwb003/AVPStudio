@@ -225,7 +225,14 @@ void TGenProcess::run()
                 avError = avcodec_send_frame(oAudioEncoderCxt, frameOutput);
                 avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
                 avError = av_write_frame(oAudioFmtCxt, packet);
+
+                // Unref frames
+                av_frame_unref(frameInput);
+                av_frame_unref(frameFiltered);
+                av_frame_unref(frameOutput);
             }
+            // Unref packet
+            av_packet_unref(packet);
         }
     }
 

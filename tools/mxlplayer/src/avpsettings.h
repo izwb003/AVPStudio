@@ -15,38 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TDOEXPORT_H
-#define TDOEXPORT_H
+#ifndef AVPSETTINGS_H
+#define AVPSETTINGS_H
 
-#include "avpsettings.h"
-
-#include <QThread>
-
-class TDoExport : public QThread
-{
-    Q_OBJECT
-public:
-    explicit TDoExport(QObject *parent = nullptr, QString mxlPath = "", QString wavPath = "", QString videoPath = "", AVP::AVPSize size = AVP::kAVPMediumSize);
-
-signals:
-    void showError(QString errorTitle, QString errorMsg);
-
-    void setProgressText(QString text);
-
-    void setProgressMax(int val);
-
-    void setProgress(int val);
-
-    void completed();
-
-protected:
-    void run();
-
-private:
-    QString mxlPath = "";
-    QString wavPath = "";
-    QString videoPath = "";
-    AVP::AVPSize size = AVP::kAVPMediumSize;
+namespace AVP {
+enum AVPSize {
+    kAVPSmallSize,
+    kAVPMediumSize,
+    kAVPLargeSize
 };
+}
 
-#endif // TDOEXPORT_H
+#endif // AVPSETTINGS_H

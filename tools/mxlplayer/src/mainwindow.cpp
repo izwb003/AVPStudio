@@ -18,6 +18,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+#include "playcontrol.h"
+
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -126,5 +128,17 @@ void MainWindow::on_pushButtonMXLBrowse_clicked()
 void MainWindow::on_pushButtonWAVBrowse_clicked()
 {
     ui->lineEditWAVPath->setText(QFileDialog::getOpenFileName(this, tr("打开WAV文件"), QDir::homePath(), "WAVE Audio (*.wav)"));
+}
+
+
+void MainWindow::on_pushButtonPlay_clicked()
+{
+    PlayControl *playControl = new PlayControl(this, ui->lineEditMXLPath->text(), ui->lineEditWAVPath->text(), getSize());
+
+    playControl->setParent(NULL);
+    playControl->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+    playControl->show();
+    this->hide();
 }
 

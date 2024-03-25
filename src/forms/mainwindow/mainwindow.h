@@ -54,5 +54,7 @@ private slots:
     void on_actionWavGenerator_triggered();
     void on_actionImageOrganizer_triggered();
     void on_actionMXLPlayer_triggered();
+    void on_actionOpenSource_triggered();
+    void on_actionCheckUpdate_triggered();
 };
 #endif // MAINWINDOW_H
