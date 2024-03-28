@@ -84,7 +84,7 @@ TDoProcess::TDoProcess(QObject *parent) {}
 void TDoProcess::run()
 {
     // FFmpeg init
-    av_log_set_level(AV_LOG_VERBOSE);
+    av_log_set_level(AV_LOG_QUIET);
 
     // Init variables
     static int avError = 0;

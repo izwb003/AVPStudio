@@ -137,7 +137,7 @@
    <item>
     <widget class="QToolButton" name="toolButtonBack">
      <property name="toolTip">
-      <string>返回</string>
+      <string>退出</string>
      </property>
      <property name="text">
       <string/>

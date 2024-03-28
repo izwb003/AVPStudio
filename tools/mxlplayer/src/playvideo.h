@@ -24,19 +24,6 @@
 
 #include <QThread>
 
-#include <SDL.h>
-
-extern "C" {
-#include <libavutil/avutil.h>
-#include <libavutil/imgutils.h>
-#include <libavformat/avformat.h>
-#include <libavcodec/avcodec.h>
-#include <libavfilter/avfilter.h>
-#include <libavfilter/buffersrc.h>
-#include <libavfilter/buffersink.h>
-#include <libswscale/swscale.h>
-}
-
 class TPlayVideo : public QThread
 {
     Q_OBJECT
@@ -65,37 +52,7 @@ private:
     int AVPWidth = 4632;
     int AVPHeight = 1080;
 
-    AVFormatContext *videoFmtCxt = NULL;
-    int videoStreamID = 0;
-
-    const AVCodec *videoDecoder = NULL;
-    AVCodecContext *videoDecoderCxt = NULL;
-
-    AVFilterGraph *videoFilterGraph = NULL;
-    AVFilterInOut *videoFilterInput = NULL;
-    AVFilterInOut *videoFilterOutput = NULL;
-
-    const AVFilter *videoFilterSrc = NULL;
-    AVFilterContext *videoFilterSrcCxt = NULL;
-    const AVFilter *videoFilterSink = NULL;
-    AVFilterContext *videoFilterSinkCxt = NULL;
-
-    SwsContext *scalerCxt = NULL;
-
-    AVPacket *packet = NULL;
-    AVFrame *frameIn = NULL;
-    AVFrame *frameFiltered = NULL;
-    AVFrame *frameScaled = NULL;
-
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *texture = NULL;
-    SDL_Thread *thread = NULL;
-    SDL_Event event;
-
     int newPosition = 0;
-
-    static int SDLRefresher(void* opaque);
 
 private slots:
     void do_updatePosition(int val);

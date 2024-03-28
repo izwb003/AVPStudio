@@ -57,8 +57,6 @@ private:
     bool isDragging = false;
     QPoint lastMousePos;
 
-    bool isPositionBarDragging = false;
-
     double timebase = 0;
 
     int muteVolume = 0;
@@ -84,8 +82,6 @@ private slots:
     void on_toolButtonPlayPause_clicked(bool checked);
 
     void on_horizontalSliderPosition_sliderReleased();
-
-    void on_horizontalSliderPosition_sliderPressed();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

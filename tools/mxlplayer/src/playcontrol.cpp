@@ -47,7 +47,7 @@ PlayControl::PlayControl(QWidget *parent, QString mxlPath, QString wavPath, AVP:
     connect(this, SIGNAL(updatePosition(int)), videoPlayer, SLOT(do_updatePosition(int)));
 
     if(videoPlayer->init())
-        return;
+        qApp->quit();
 
     videoPlayer->start();
 }
@@ -67,14 +67,13 @@ void PlayControl::do_setPositionBarMax(int val, double timebase)
     ui->horizontalSliderPosition->setMaximum(val);
     this->timebase = timebase;
     QTime totalTime(0, 0, 0);
-    qDebug()<<timebase;
     totalTime = totalTime.addSecs((int)((double)val * timebase));
     ui->labelTotalTime->setText(totalTime.toString("mm:ss"));
 }
 
 void PlayControl::do_setPosition(int val)
 {
-    if(!isPositionBarDragging)
+    if(!ui->horizontalSliderPosition->isSliderDown())
         ui->horizontalSliderPosition->setValue(val);
     QTime time(0, 0, 0);
     time = time.addSecs((int)((double)val * timebase));
@@ -163,12 +162,4 @@ void PlayControl::on_toolButtonPlayPause_clicked(bool checked)
 void PlayControl::on_horizontalSliderPosition_sliderReleased()
 {
     emit updatePosition(ui->horizontalSliderPosition->value());
-    isPositionBarDragging = false;
 }
-
-
-void PlayControl::on_horizontalSliderPosition_sliderPressed()
-{
-    isPositionBarDragging = true;
-}
-
