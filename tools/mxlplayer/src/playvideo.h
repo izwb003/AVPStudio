@@ -15,29 +15,54 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TGENPROCESS_H
-#define TGENPROCESS_H
+#ifndef TPLAYVIDEO_H
+#define TPLAYVIDEO_H
+
+#define SDL_MAIN_HANDLED
+
+#include "avpsettings.h"
 
 #include <QThread>
 
-class TGenProcess : public QThread
+class TPlayVideo : public QThread
 {
     Q_OBJECT
 public:
-    explicit TGenProcess(QObject *parent = nullptr, QString inputFilePath = "", QString outputFilePath = "", int volumePercent = 100);
+    explicit TPlayVideo(QObject *parent = nullptr, QString mxlPath = "", QString wavPath = "", AVP::AVPSize size = AVP::kAVPMediumSize);
 
-    QString inputFilePath;
-    QString outputFilePath;
-    int volumePercent;
+    int init();
+
+    void cleanup();
+
+    void notifyQuit();
+
+signals:
+    void showError(QString errorMsg);
+
+    void setPositionBarMax(int val, double timebase);
+
+    void setPosition(int val);
+
+    void sdlQuit();
+
+private:
+    QString mxlPath = "";
+    QString wavPath = "";
+    AVP::AVPSize size = AVP::kAVPMediumSize;
+    int AVPWidth = 4632;
+    int AVPHeight = 1080;
+
+    int newPosition = 0;
+
+private slots:
+    void do_updatePosition(int val);
+
+    void do_play();
+
+    void do_pause();
 
 protected:
     void run();
-
-signals:
-    void setProgressMax(int64_t num);
-    void setProgress(int64_t num);
-    void showError(QString errorStr, QString title);
-    void completed();
 };
 
-#endif // TGENPROCESS_H
+#endif // TPLAYVIDEO_H

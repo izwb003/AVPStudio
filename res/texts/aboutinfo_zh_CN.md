@@ -4,7 +4,7 @@
 
 ### 编写者
 
-[@izwb003](https://space.bilibili.com/36937211)    [@筱理_Rize](https://space.bilibili.com/3848521)
+[@izwb003](https://space.bilibili.com/36937211)
 
 ### 原理证明
 
@@ -16,7 +16,7 @@
 
 ### 同时提供支持
 
-[@神奇的红毛丹](https://space.bilibili.com/364856318/)    @一个复杂精密的好名字    @寒    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
+[@神奇的红毛丹](https://space.bilibili.com/364856318/)    [@多真燐](https://space.bilibili.com/8275564)    @一个复杂精密的好名字    @寒    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
 
 （以上排名不分先后）
 
@@ -40,6 +40,8 @@ AVPStudio与杜比实验室、科视数字系统有限公司无关。AVPStudio�
 AVPStudio基于Qt许可证使用Qt6技术。
 
 AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软件。它的源代码可以在[GitHub](https://github.com/izwb003/AVPStudio)下载。
+
+AVPStudio MXLPlayer基于zlib license使用来自[SDL](https://www.libsdl.org/)的软件。
 
 ### 开放源代码许可
 

@@ -18,8 +18,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include "genprocess.h"
-
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -62,6 +60,7 @@ void MainWindow::do_showError(QString errorStr, QString title)
 
 void MainWindow::do_processFinished()
 {
+    ui->progressBar->setValue(ui->progressBar->maximum());
     ui->statusbar->showMessage(tr("完成"));
     this->setWindowTitle("AVPStudio WAVGenerator");
     ui->pushButtonConvert->setEnabled(true);
@@ -100,11 +99,11 @@ void MainWindow::on_pushButtonConvert_clicked()
             return;
     }
 
-    TGenProcess *genProcess = new TGenProcess(this, ui->lineEditInputFile->text(), ui->lineEditOutputFile->text(), ui->spinBoxVolume->value());
+    genProcess = new TGenProcess(this, ui->lineEditInputFile->text(), ui->lineEditOutputFile->text(), ui->spinBoxVolume->value());
 
     connect(genProcess, SIGNAL(setProgressMax(int64_t)), this, SLOT(do_setProgressMax(int64_t)));
     connect(genProcess, SIGNAL(setProgress(int64_t)), this, SLOT(do_setProgress(int64_t)));
-    connect(genProcess, SIGNAL(finished()), this, SLOT(do_processFinished()));
+    connect(genProcess, SIGNAL(completed()), this, SLOT(do_processFinished()));
     connect(genProcess, SIGNAL(showError(QString,QString)), this, SLOT(do_showError(QString,QString)));
     connect(genProcess, &QThread::finished, genProcess, &QObject::deleteLater);
 
@@ -132,5 +131,16 @@ void MainWindow::on_checkBoxDolbyNaming_stateChanged(int arg1)
             ui->lineEditOutputFile->setText(fileInfo.absolutePath() + "/" + fileInfo.baseName().section("_", 0, 0) + ".wav");
         }
     }
+}
+
+
+void MainWindow::on_pushButtonCancel_clicked()
+{
+    genProcess->terminate();
+    ui->statusbar->showMessage(tr("已取消。"));
+    this->setWindowTitle("AVPStudio WAVGenerator");
+    ui->pushButtonConvert->setEnabled(true);
+    ui->pushButtonCancel->setEnabled(false);
+    ui->progressBar->setValue(0);
 }
 

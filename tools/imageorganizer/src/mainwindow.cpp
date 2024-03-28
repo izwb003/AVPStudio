@@ -488,6 +488,10 @@ end:    // Jump flag for errors
     av_frame_free(&imageFrameFiltered);
     av_frame_free(&imageFrameOut);
 
+    avfilter_free(imageFilterPadCxt);
+    avfilter_free(imageFilterSrcCxt);
+    avfilter_free(imageFilterSinkCxt);
+
     avfilter_graph_free(&imageFilterGraph);
     avfilter_inout_free(&imageFilterInput);
     avfilter_inout_free(&imageFilterOutput);

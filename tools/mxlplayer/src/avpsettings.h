@@ -15,29 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TGENPROCESS_H
-#define TGENPROCESS_H
+#ifndef AVPSETTINGS_H
+#define AVPSETTINGS_H
 
-#include <QThread>
-
-class TGenProcess : public QThread
-{
-    Q_OBJECT
-public:
-    explicit TGenProcess(QObject *parent = nullptr, QString inputFilePath = "", QString outputFilePath = "", int volumePercent = 100);
-
-    QString inputFilePath;
-    QString outputFilePath;
-    int volumePercent;
-
-protected:
-    void run();
-
-signals:
-    void setProgressMax(int64_t num);
-    void setProgress(int64_t num);
-    void showError(QString errorStr, QString title);
-    void completed();
+namespace AVP {
+enum AVPSize {
+    kAVPSmallSize,
+    kAVPMediumSize,
+    kAVPLargeSize
 };
+}
 
-#endif // TGENPROCESS_H
+#endif // AVPSETTINGS_H

@@ -15,50 +15,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TDOEXPORT_H
+#define TDOEXPORT_H
 
-#include "genprocess.h"
+#include "avpsettings.h"
 
-#include <QMainWindow>
-#include <QFileInfo>
+#include <QThread>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
+class TDoExport : public QThread
 {
     Q_OBJECT
-
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit TDoExport(QObject *parent = nullptr, QString mxlPath = "", QString wavPath = "", QString videoPath = "", AVP::AVPSize size = AVP::kAVPMediumSize);
 
-private slots:
-    void do_setProgressMax(int64_t num);
+signals:
+    void showError(QString errorTitle, QString errorMsg);
 
-    void do_setProgress(int64_t num);
+    void setProgressText(QString text);
 
-    void do_showError(QString errorStr, QString title);
+    void setProgressMax(int val);
 
-    void do_processFinished();
+    void setProgress(int val);
 
-    void on_pushButtonBrowseInputFile_clicked();
+    void completed();
 
-    void on_pushButtonBrowseOutputFile_clicked();
-
-    void on_pushButtonConvert_clicked();
-
-    void on_checkBoxDolbyNaming_stateChanged(int arg1);
-
-    void on_pushButtonCancel_clicked();
+protected:
+    void run();
 
 private:
-    Ui::MainWindow *ui;
-
-    TGenProcess *genProcess;
+    QString mxlPath = "";
+    QString wavPath = "";
+    QString videoPath = "";
+    AVP::AVPSize size = AVP::kAVPMediumSize;
 };
-#endif // MAINWINDOW_H
+
+#endif // TDOEXPORT_H

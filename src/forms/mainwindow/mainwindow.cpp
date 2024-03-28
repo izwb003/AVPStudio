@@ -29,6 +29,7 @@
 #include "settings.h"
 
 #include <QDebug>
+#include <QDesktopServices>
 #include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -132,11 +133,30 @@ void MainWindow::on_actionWavGenerator_triggered()
     delete wavGeneratorProcess;
 }
 
-
-void MainWindow::on_action_triggered()
+void MainWindow::on_actionImageOrganizer_triggered()
 {
     QProcess *imageOrganizerProcess = new QProcess(this);
     imageOrganizerProcess -> startDetached("imageorganizer");
     delete imageOrganizerProcess;
+}
+
+
+void MainWindow::on_actionMXLPlayer_triggered()
+{
+    QProcess *mxlPlayerProcess = new QProcess(this);
+    mxlPlayerProcess -> startDetached("mxlplayer");
+    delete mxlPlayerProcess;
+}
+
+
+void MainWindow::on_actionOpenSource_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio")));
+}
+
+
+void MainWindow::on_actionCheckUpdate_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio/releases")));
 }
 

@@ -15,6 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
+/* To anyone who reads my code:
+ * I am not very familiar with multi-thread programming.
+ * I was sleeping when my teacher taught me these things.
+ * So I may have made some foolish mistakes in this regard, such as using terminate() extensively.
+ * If I have the opportunity to continue maintaining these codes in the future, perhaps I can use more enriched experience to correct them.
+ * But now, they are "usable" - limited to being "able to run", that's all.
+ */
+
 #include "doprocess.h"
 
 #include "settings.h"
@@ -41,7 +50,8 @@ static const char *filterGraphLarge =
     "[scaled]split[scaled1][scaled2];"
     "[scaled1]crop=3840:1080:0:0[left];"
     "[scaled2]crop=3840:1080:2327:0[right];"
-    "[left][right]vstack=2[out]";
+    "[left][right]vstack=2[ready];"
+    "[ready]fps=24[out]";
 static const char *filterGraphMedium =
     "[in]pad=iw:ih:0:0:black[expanded];"
     "[expanded]scale=4632:1080[scaled];"
@@ -49,7 +59,8 @@ static const char *filterGraphMedium =
     "[padded]split[padded1][padded2];"
     "[padded1]crop=3840:1080:0:0[left];"
     "[padded2]crop=3840:1080:2327:0[right];"
-    "[left][right]vstack=2[out]";
+    "[left][right]vstack=2[ready];"
+    "[ready]fps=24[out]";
 static const char *filterGraphSmall =
     "[in]pad=iw:ih:0:0:black[expanded];"
     "[expanded]scale=2830:1080[scaled];"
@@ -57,7 +68,8 @@ static const char *filterGraphSmall =
     "[padded]split[padded1][padded2];"
     "[padded1]crop=3840:1080:0:0[left];"
     "[padded2]crop=3840:1080:2327:0[right];"
-    "[left][right]vstack=2[out]";
+    "[left][right]vstack=2[ready];"
+    "[ready]fps=24[out]";
 
 template<typename T> int toUpperInt(T val)
 {
@@ -112,6 +124,7 @@ void TDoProcess::run()
     AVFilterInOut *videoFilterOutput = NULL;
 
     AVFilterContext *videoFilterPadCxt = NULL;
+    AVFilterContext *videoFilterFpsCxt = NULL;
 
     const AVFilter *videoFilterSrc = NULL;
     AVFilterContext *videoFilterSrcCxt = NULL;
@@ -136,6 +149,8 @@ void TDoProcess::run()
 
     SwrContext *resamplerCxt = NULL;
 
+    uint64_t audioPTSCounter = 0;
+
     // Open input file and find stream info
     iVideoFmtCxt = avformat_alloc_context();
     avError = avformat_open_input(&iVideoFmtCxt, settings.inputVideoPath.toUtf8(), 0, 0);
@@ -153,7 +168,7 @@ void TDoProcess::run()
 
     // Get input video and audio stream
     iVideoStreamID = av_find_best_stream(iVideoFmtCxt, AVMEDIA_TYPE_VIDEO, -1, -1, &iVideoDecoder, 0);
-    if(avError < 0)
+    if(iVideoStreamID == AVERROR_STREAM_NOT_FOUND)
     {
         avErrorMsg = tr("加载输入文件失败：找不到视频流。");
         goto end;
@@ -209,6 +224,7 @@ void TDoProcess::run()
     oVideoEncoderCxt -> color_trc = settings.outputColor.outputVideoColorTrac;
     oVideoEncoderCxt -> profile = 0;
     oVideoEncoderCxt -> max_b_frames = 0;
+    oVideoEncoderCxt -> framerate = settings.outputFrameRate;
 
     if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
     {
@@ -235,7 +251,7 @@ void TDoProcess::run()
         goto end;
     }
     oVideoStream -> time_base = oVideoEncoderCxt->time_base;
-    oVideoStream ->r_frame_rate = settings.outputFrameRate;
+    oVideoStream -> r_frame_rate = settings.outputFrameRate;
 
     if(iAudioStreamID != AVERROR_STREAM_NOT_FOUND)
     {
@@ -403,6 +419,12 @@ void TDoProcess::run()
         }
     }
 
+    if(settings.size == AVP::kAVPMediumSize || settings.size == AVP::kAVPMediumSize)
+        videoFilterFpsCxt = avfilter_graph_get_filter(videoFilterGraph, "Parsed_fps_7");
+    if(settings.size == AVP::kAVPLargeSize)
+        videoFilterFpsCxt = avfilter_graph_get_filter(videoFilterGraph, "Parsed_fps_6");
+    avError = av_opt_set(videoFilterFpsCxt, "fps", QString::number(settings.outputFrameRate.num).toUtf8() + "/" + QString::number(settings.outputFrameRate.den).toUtf8(), AV_OPT_SEARCH_CHILDREN);
+
     avError = avfilter_graph_config(videoFilterGraph, 0);
     if(avError < 0)
     {
@@ -428,17 +450,29 @@ void TDoProcess::run()
 
                 // Apply filter
                 avError = av_buffersrc_add_frame(videoFilterSrcCxt, vFrameIn);
-                avError = av_buffersink_get_frame(videoFilterSinkCxt, vFrameFiltered);
+                while(true)
+                {
+                    avError = av_buffersink_get_frame(videoFilterSinkCxt, vFrameFiltered);
+                    if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
+                        break;
 
-                // Rescale to YUV422
-                avError = sws_scale_frame(scale422Cxt, vFrameOut, vFrameFiltered);
+                    // Rescale to YUV422
+                    avError = sws_scale_frame(scale422Cxt, vFrameOut, vFrameFiltered);
 
-                // Encode
-                avError = avcodec_send_frame(oVideoEncoderCxt, vFrameOut);
-                avError = avcodec_receive_packet(oVideoEncoderCxt, packet);
-                av_packet_rescale_ts(packet, oVideoEncoderCxt->time_base, oVideoFmtCxt->streams[0]->time_base);
-                avError = av_write_frame(oVideoFmtCxt, packet);
+                    // Encode
+                    avError = avcodec_send_frame(oVideoEncoderCxt, vFrameOut);
+                    avError = avcodec_receive_packet(oVideoEncoderCxt, packet);
+                    av_packet_rescale_ts(packet, oVideoEncoderCxt->time_base, oVideoFmtCxt->streams[0]->time_base);
+                    avError = av_interleaved_write_frame(oVideoFmtCxt, packet);
+
+                    // Unref frame
+                    av_frame_unref(vFrameIn);
+                    av_frame_unref(vFrameFiltered);
+                    av_frame_unref(vFrameOut);
+                }
             }
+            // Unref packet
+            av_packet_unref(packet);
         }
     }
 
@@ -517,11 +551,21 @@ void TDoProcess::run()
                     avError = swr_config_frame(resamplerCxt, aFrameOut, aFrameFiltered);
                     avError = swr_convert_frame(resamplerCxt, aFrameOut, aFrameFiltered);
 
+                    aFrameOut -> pts = audioPTSCounter;
+                    audioPTSCounter += oAudioEncoderCxt->frame_size;
+
                     // Encode
                     avError = avcodec_send_frame(oAudioEncoderCxt, aFrameOut);
                     avError = avcodec_receive_packet(oAudioEncoderCxt, packet);
                     avError = av_write_frame(oAudioFmtCxt, packet);
+
+                    // Unref frames
+                    av_frame_unref(aFrameIn);
+                    av_frame_unref(aFrameFiltered);
+                    av_frame_unref(aFrameOut);
                 }
+                // Unref packet
+                av_packet_unref(packet);
             }
         }
     }
@@ -572,6 +616,11 @@ end:    // Jump flag for errors
     av_frame_free(&vFrameFiltered);
     av_frame_free(&vFrameOut);
 
+    avfilter_free(videoFilterSrcCxt);
+    avfilter_free(videoFilterSinkCxt);
+    avfilter_free(videoFilterPadCxt);
+    avfilter_free(videoFilterFpsCxt);
+
     avfilter_graph_free(&videoFilterGraph);
     avfilter_inout_free(&videoFilterInput);
     avfilter_inout_free(&videoFilterOutput);
@@ -582,6 +631,9 @@ end:    // Jump flag for errors
     av_frame_free(&aFrameFiltered);
     av_frame_free(&aFrameOut);
 
+    avfilter_free(volumeFilterSrcCxt);
+    avfilter_free(volumeFilterSinkCxt);
+    avfilter_free(volumeFilterCxt);
     avfilter_graph_free(&volumeFilterGraph);
 
     swr_free(&resamplerCxt);

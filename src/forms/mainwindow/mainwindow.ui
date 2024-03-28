@@ -47,13 +47,16 @@
      <string>帮助(&amp;H)</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionOpenSource"/>
+    <addaction name="actionCheckUpdate"/>
    </widget>
    <widget class="QMenu" name="menu_T">
     <property name="title">
      <string>工具(&amp;T)</string>
     </property>
     <addaction name="actionWavGenerator"/>
-    <addaction name="action"/>
+    <addaction name="actionImageOrganizer"/>
+    <addaction name="actionMXLPlayer"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_T"/>
@@ -95,13 +98,40 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/wavgenerator_icon256.ico</normaloff>:/icons/icons/wavgenerator_icon256.ico</iconset>
+   </property>
    <property name="text">
     <string>WAV生成器</string>
    </property>
   </action>
-  <action name="action">
+  <action name="actionImageOrganizer">
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/imageorganizer_icon256.ico</normaloff>:/icons/icons/imageorganizer_icon256.ico</iconset>
+   </property>
    <property name="text">
     <string>图片排列器</string>
+   </property>
+  </action>
+  <action name="actionMXLPlayer">
+   <property name="icon">
+    <iconset resource="../../../res/resources.qrc">
+     <normaloff>:/icons/icons/mxlplayer_icon256.ico</normaloff>:/icons/icons/mxlplayer_icon256.ico</iconset>
+   </property>
+   <property name="text">
+    <string>MXL播放器</string>
+   </property>
+  </action>
+  <action name="actionOpenSource">
+   <property name="text">
+    <string>开放源代码</string>
+   </property>
+  </action>
+  <action name="actionCheckUpdate">
+   <property name="text">
+    <string>检查更新...</string>
    </property>
   </action>
  </widget>
