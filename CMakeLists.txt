@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(AVPStudio VERSION 0.2.0 LANGUAGES CXX)
+project(AVPStudio VERSION 0.2.2 LANGUAGES CXX)
 
 # Link ffmpeg
 if(WIN32)
@@ -48,8 +48,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add Qt packages
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets NetWork)
 
 # Set multi-language TS files
 set(TS_FILES ts/AVPStudio_zh_CN.ts)
@@ -124,6 +124,7 @@ target_link_libraries(AVPStudio PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::Network
     ${LIBAVUTIL_PATH}
     ${LIBAVCODEC_PATH}
     ${LIBAVFORMAT_PATH}

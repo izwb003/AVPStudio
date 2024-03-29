@@ -30,7 +30,13 @@
 
 #include <QDebug>
 #include <QDesktopServices>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QProcess>
+#include <QRegularExpression>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -62,11 +68,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pageCompleted, SIGNAL(reInit()), this, SLOT(on_actionNewContent_triggered()));
     connect(this, SIGNAL(toProcess()), pageProcess, SLOT(do_proc()));
     connect(this, SIGNAL(openFile(QString)), pageCreate, SLOT(on_labelDragText_linkActivated(QString)));
+
+    checkUpdate();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::checkUpdate()
+{
+    updateChecker = new QNetworkAccessManager(this);
+    connect(updateChecker, SIGNAL(finished(QNetworkReply*)), this, SLOT(do_checkUpdateFinished(QNetworkReply*)));
+
+    updateChecker->get(QNetworkRequest(QUrl("https://api.github.com/repos/izwb003/AVPStudio/releases/latest")));
 }
 
 void MainWindow::do_createContent()
@@ -95,6 +111,60 @@ void MainWindow::do_toCompleted(bool isError, QString errorStr)
     PageCompleted *pageCompleted = qobject_cast<PageCompleted*>(ui->stackedWidget->widget(4));
     pageCompleted->setStatus(isError, errorStr);
     ui->stackedWidget->setCurrentIndex(4);
+}
+
+bool compareVersion(QString newVersionStr)
+{
+    static const QRegularExpression newVersionRegex("v(\\d+)\\.(\\d+)\\.(\\d+)");
+    QRegularExpressionMatch newVersionMatch = newVersionRegex.match(newVersionStr);
+    if(newVersionMatch.hasMatch())
+    {
+        int newMajor = newVersionMatch.captured(1).toInt();
+        int newMinor = newVersionMatch.captured(2).toInt();
+        int newPatch = newVersionMatch.captured(3).toInt();
+
+        if(newMajor > PROJECT_VERSION_MAJOR)
+            return true;
+        else if(newMajor == PROJECT_VERSION_MAJOR)
+        {
+            if(newMinor > PROJECT_VERSION_MINOR)
+                return true;
+            else if(newMinor == PROJECT_VERSION_MINOR)
+                return newPatch > PROJECT_VERSION_PATCH;
+        }
+    }
+    return false;
+}
+
+void MainWindow::do_checkUpdateFinished(QNetworkReply *reply)
+{
+    if(reply->error() == QNetworkReply::NoError)
+    {
+        QString newVersionStr;
+        QString newVersionUrl;
+
+        QByteArray data = reply->readAll();
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+        if(!jsonDoc.isObject())
+            return;
+        QJsonObject jsonObj = jsonDoc.object();
+
+        QStringList jsonKeys = jsonObj.keys();
+        for(QString jsonKey : jsonKeys)
+        {
+            if(jsonKey == "tag_name")
+                newVersionStr = jsonObj.value(jsonKey).toString();
+            if(jsonKey == "html_url")
+                newVersionUrl = jsonObj.value(jsonKey).toString();
+        }
+
+        if(compareVersion(newVersionStr))
+        {
+            if(QMessageBox::question(this, tr("版本更新"), tr("有新版本的AVPStudio可用。要下载吗？")) == QMessageBox::Yes)
+                QDesktopServices::openUrl(QUrl(newVersionUrl));
+        }
+    }
 }
 
 void MainWindow::on_actionAbout_triggered()

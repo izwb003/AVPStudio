@@ -74,7 +74,7 @@ MXL播放器。
 
 CMake脚本已被调整为默认从互联网下载预构建ffmpeg。请确保构建时互联网连接畅通。您也可以参阅CMakeLists.txt自行配置外部库。
 
-构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets。
+构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets, Qt6Network。
 
 ## 致谢与声明
 
