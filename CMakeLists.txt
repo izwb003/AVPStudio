@@ -39,6 +39,13 @@ include_directories(${FFMPEG_PATH}/include)
 add_subdirectory(external/SDL)
 include_directories(external/SDL/include)
 
+# Copy cinema list
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cinemalist.xml
+    ${CMAKE_CURRENT_BINARY_DIR}/cinemalist.xml
+    @ONLY
+)
+
 # Necessary Qt settings
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

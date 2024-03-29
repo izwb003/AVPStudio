@@ -18,6 +18,7 @@
 #ifndef PAGEWELCOME_H
 #define PAGEWELCOME_H
 
+#include <QTreeWidgetItem>
 #include <QWidget>
 
 namespace Ui {
@@ -35,16 +36,21 @@ public:
 signals:
     void createContent();
 
+private:
+    void fillCinemaList();
+
 private slots:
     void on_pushButtonExit_clicked();
 
-    void on_radioButtonSmall_clicked(bool checked);
-
-    void on_radioButtonMedium_clicked(bool checked);
-
-    void on_radioButtonLarge_clicked(bool checked);
-
     void on_pushButtonNext_clicked();
+
+    void on_treeWidgetCinemas_itemActivated(QTreeWidgetItem *item, int column);
+
+    void on_radioButtonSmall_toggled(bool checked);
+
+    void on_radioButtonMedium_toggled(bool checked);
+
+    void on_radioButtonLarge_toggled(bool checked);
 
 private:
     Ui::PageWelcome *ui;

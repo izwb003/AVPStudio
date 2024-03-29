@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--This file is a part of AVPStudio.-->
+<!--Data source: @步平凡x-->
+<!--Ref: @izwb003-->
+
+<cinemalist version="1" updatetime="2023/06/15">
+    <location name="中华人民共和国">
+        <province name="北京">
+            <cinema name="北京耀莱成龙影城（五棵松万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="北京万达影城（丰台万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+            <cinema name="北京寰映影城（合生汇店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="北京耀莱成龙影城（丽泽桥店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+            <cinema name="北京万达影城（通州万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="上海">
+            <cinema name="上海万达影城（颛桥万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="上海寰映影城（静安大融城店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+            <cinema name="上海万达影城（中信泰富万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="上海华谊兄弟电影中心（长风大悦城店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="上海万达影城（五角场万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="辽宁">
+            <cinema name="大连万达影城（凯德和平广场奥纳店）">
+                <avpsize>Small</avpsize>
+            </cinema>
+            <cinema name="沈阳万象影城（长白万象汇店）">
+                <avpsize>Small</avpsize>
+            </cinema>
+        </province>
+        <province name="重庆">
+            <cinema name="重庆万达影城（南坪万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="山东">
+            <cinema name="济南万达影城（世茂广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="广东">
+            <cinema name="东莞万达影城（南城蜂汇店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="广州唐德国际影城（白云汇店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="深圳万象影城（深圳湾万象城店）">
+                <avpsize>Medium</avpsize> 
+            </cinema>
+            <cinema name="深圳万象影城（罗湖万象城店）">
+                <avpsize>Small</avpsize>
+            </cinema>
+        </province>
+        <province name="江苏">
+            <cinema name="南京万达影城（江宁太阳城店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+            <cinema name="南京万达影城（新街口万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="四川">
+            <cinema name="成都万达影城（青羊万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="福建">
+            <cinema name="厦门华谊兄弟电影中心（集美市民广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="福州万达影城（金融街万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+            <cinema name="泉州万达影城（城东万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="宁夏">
+            <cinema name="银川BHG华联国际影城（悦海新天地店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="陕西">
+            <cinema name="西安万达影城（高新万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="天津">
+            <cinema name="天津万达影城（塘沽万达广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+        <province name="广西">
+            <cinema name="南宁万达影城（青秀万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="河南">
+            <cinema name="郑州万达影城（公园茂店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="浙江">
+            <cinema name="杭州万达影城（未来科技城余杭万达广场店）">
+                <avpsize>Medium</avpsize>
+            </cinema>
+        </province>
+        <province name="内蒙古">
+            <cinema name="呼和浩特寰映影城（振华购物广场店）">
+                <avpsize>Large</avpsize>
+            </cinema>
+        </province>
+    </location>
+</cinemalist>

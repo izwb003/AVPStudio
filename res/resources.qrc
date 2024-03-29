@@ -9,9 +9,6 @@
         <file>styles/mainstyle.qss</file>
     </qresource>
     <qresource prefix="/images">
-        <file>images/AVP_Large.jpg</file>
-        <file>images/AVP_Medium.jpg</file>
-        <file>images/AVP_Small.jpg</file>
         <file>images/drag-drop.png</file>
         <file>images/down.png</file>
         <file>images/up.png</file>

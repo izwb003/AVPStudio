@@ -172,3 +172,37 @@ QProgressBar::chunk {
 QStatusBar {
     color: white;
 }
+
+QTreeView {
+    color:white
+}
+
+QHeaderView::section {
+    background-color: #3d3d3d;
+    color: white
+}
+
+QScrollBar {
+    width: 8px;
+    background-color: #3d3d3d;
+    margin: 0px, 0px, 0px, 0px;
+    padding-top: 9px;
+    padding-bottom: 9px
+}
+
+QScrollBar::add-page, QScrollBar::sub-page {
+    background-color: #1b1b1b
+}
+
+QScrollBar::handle {
+    width: 8px;
+    border: none
+}
+
+QScrollBar::sub-line {
+    image: url(:/images/images/up.png)
+}
+
+QScrollBar::add-line {
+    image: url(:/images/images/down.png)
+}
