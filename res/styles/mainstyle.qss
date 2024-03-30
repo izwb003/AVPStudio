@@ -132,11 +132,16 @@ QCheckBox::indicator:checked {
     height: 32px
 }
 
+QSlider {
+    height: 10px
+}
+
 QSlider::handle {
     background-color: white;
     border: 1px solid white;
     width: 10px;
-    margin: -15px 0px -15px 0px;
+    height: 10px;
+    margin: 0px 0px 0px 0px;
     border-radius: 5px
 }
 

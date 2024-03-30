@@ -61,6 +61,8 @@ private slots:
 
     void do_pause();
 
+    void do_volumeChanged(int val);
+
 protected:
     void run();
 };

@@ -20,7 +20,6 @@
 
 #include "settings.h"
 
-#include <QDebug>
 #include <QXmlStreamReader>
 
 PageWelcome::PageWelcome(QWidget *parent)

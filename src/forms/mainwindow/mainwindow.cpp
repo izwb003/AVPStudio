@@ -28,7 +28,6 @@
 
 #include "settings.h"
 
-#include <QDebug>
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>

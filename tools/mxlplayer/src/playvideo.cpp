@@ -17,8 +17,6 @@
  */
 #include "playvideo.h"
 
-#include <QDebug>
-
 #include <SDL.h>
 
 #define __STDC_CONSTANT_MACROS
@@ -50,6 +48,7 @@ extern "C" {
  * case 2: Quit.
  */
 static int refresherFlag = 1;
+SDL_mutex *refresherFlagMutex = NULL;
 
 // FFmpeg filter graph description
 static const char *filterGraphLarge =
@@ -104,8 +103,11 @@ static int oAudioBufferSize = 0;
 static int oAudioBufferSampleCount = 0;
 static uint8_t *oAudioBuffer = NULL;
 
-AVAudioFifo *audioQueue = NULL;
-SDL_mutex *audioQueueMutex = NULL;
+static AVAudioFifo *audioQueue = NULL;
+static SDL_mutex *audioQueueMutex = NULL;
+
+static int volume = 50;
+static SDL_mutex *volumeMutex = NULL;
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -121,6 +123,7 @@ static int SDLRefresher(void *opaque)
     refreshEvent.type = SDL_CUSTOM_REFRESH_EVENT;
     while(true)
     {
+        SDL_LockMutex(refresherFlagMutex);
         if(refresherFlag == 0)
         {
             SDL_PushEvent(&refreshEvent);
@@ -130,6 +133,7 @@ static int SDLRefresher(void *opaque)
             continue;
         else if(refresherFlag == 2)
             break;
+        SDL_UnlockMutex(refresherFlagMutex);
     }
     return 0;
 }
@@ -140,8 +144,10 @@ static int SDLAudioDecoder(void *opaque)
 
     while(true)
     {
+        SDL_LockMutex(refresherFlagMutex);
         if(refresherFlag != 0)
             continue;
+        SDL_UnlockMutex(refresherFlagMutex);
 
         if(av_read_frame(audioFmtCxt, aPacket) == 0)
         {
@@ -181,10 +187,14 @@ static void SDLFillAudio(void *data, uint8_t *stream, int length)
     SDL_LockMutex(audioQueueMutex);
     oAudioBufferSampleCount = av_audio_fifo_read(audioQueue, (void**)&oAudioBuffer, length / 4);
     SDL_UnlockMutex(audioQueueMutex);
-    if(oAudioBufferSampleCount < 0)
+    if(oAudioBufferSampleCount <= 0)
         return;
     oAudioBufferSize = av_samples_get_buffer_size(0, audioDecoderCxt->ch_layout.nb_channels, oAudioBufferSampleCount, AV_SAMPLE_FMT_S16, 1);
-    SDL_MixAudio(stream, oAudioBuffer, oAudioBufferSize, SDL_MIX_MAXVOLUME);
+    if(oAudioBufferSize <= 0)
+        return;
+    SDL_LockMutex(volumeMutex);
+    SDL_MixAudio(stream, oAudioBuffer, oAudioBufferSize, volume);
+    SDL_UnlockMutex(volumeMutex);
 }
 
 TPlayVideo::TPlayVideo(QObject *parent, QString mxlPath, QString wavPath, AVP::AVPSize size)
@@ -385,7 +395,7 @@ int TPlayVideo::init()
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
     SDL_DisplayMode display;
     SDL_GetDesktopDisplayMode(0, &display);
-    window = SDL_CreateWindow("AVPStudio - MXLPlayer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, display.w, (int)((double)AVPHeight * ((double)display.w / (double)AVPWidth)), 0);
+    window = SDL_CreateWindow("AVPStudio - MXLPlayer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, display.w, (int)((double)AVPHeight * ((double)display.w / (double)AVPWidth)), 0);
     renderer = SDL_CreateRenderer(window, -1, 0);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING, AVPWidth, AVPHeight);
 
@@ -451,6 +461,8 @@ void TPlayVideo::cleanup()
 
     av_audio_fifo_free(audioQueue);
     SDL_DestroyMutex(audioQueueMutex);
+    SDL_DestroyMutex(volumeMutex);
+    SDL_DestroyMutex(refresherFlagMutex);
 }
 
 void TPlayVideo::notifyQuit()
@@ -470,16 +482,27 @@ void TPlayVideo::do_updatePosition(int val)
 
 void TPlayVideo::do_play()
 {
+    SDL_LockMutex(refresherFlagMutex);
     refresherFlag = 0;
+    SDL_LockMutex(refresherFlagMutex);
     if(!wavPath.isEmpty())
         SDL_PauseAudio(0);
 }
 
 void TPlayVideo::do_pause()
 {
+    SDL_LockMutex(refresherFlagMutex);
     refresherFlag = 1;
+    SDL_LockMutex(refresherFlagMutex);
     if(!wavPath.isEmpty())
         SDL_PauseAudio(1);
+}
+
+void TPlayVideo::do_volumeChanged(int val)
+{
+    SDL_LockMutex(volumeMutex);
+    volume = val;
+    SDL_UnlockMutex(volumeMutex);
 }
 
 void TPlayVideo::run()
@@ -549,7 +572,9 @@ void TPlayVideo::run()
             }
             else if(eventSDL.type == SDL_CUSTOM_QUIT_EVENT)
             {
+                SDL_LockMutex(refresherFlagMutex);
                 refresherFlag = 2;
+                SDL_UnlockMutex(refresherFlagMutex);
                 cleanup();
                 return;
             }
