@@ -20,6 +20,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QNetworkAccessManager>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -42,11 +43,15 @@ signals:
 private:
     Ui::MainWindow *ui;
 
+    QNetworkAccessManager *updateChecker;
+    void checkUpdate();
+
 private slots:
     void do_createContent();
     void do_editContent();
     void do_toProcess();
     void do_toCompleted(bool isError, QString errorStr);
+    void do_checkUpdateFinished(QNetworkReply* reply);
     void on_actionAbout_triggered();
     void on_actionExit_triggered();
     void on_actionNewContent_triggered();

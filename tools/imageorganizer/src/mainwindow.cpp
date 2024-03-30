@@ -295,7 +295,7 @@ void MainWindow::doConversion()
         oImageEncoderCxt -> pix_fmt = AV_PIX_FMT_YUVJ420P;
     else if(oImageFileInfo.suffix() == "png")
         oImageEncoderCxt -> pix_fmt = AV_PIX_FMT_RGBA;
-    oImageEncoderCxt -> time_base = (AVRational){1, 25};
+    oImageEncoderCxt -> time_base = {1, 25};
 
     // Create output format and stream
     avError = avformat_alloc_output_context2(&oImageFmtCxt, 0, 0, settings.fileOutputPath.toUtf8());

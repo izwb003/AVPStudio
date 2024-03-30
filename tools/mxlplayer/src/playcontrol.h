@@ -45,6 +45,8 @@ signals:
 
     void pause();
 
+    void setVolume(int val);
+
 private:
     Ui::PlayControl *ui;
 

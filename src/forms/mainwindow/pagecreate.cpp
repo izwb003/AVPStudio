@@ -66,6 +66,7 @@ void PageCreate::dropEvent(QDropEvent *event)
                 settings.inputVideoPath = fileName;
                 settings.inputVideoInfo = fileInfo;
                 emit editContent();
+                rewriteLabelDragText();
             }
             else
                 rewriteLabelDragText();

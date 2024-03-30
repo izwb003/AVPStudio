@@ -45,6 +45,7 @@ PlayControl::PlayControl(QWidget *parent, QString mxlPath, QString wavPath, AVP:
     connect(this, SIGNAL(play()), videoPlayer, SLOT(do_play()));
     connect(this, SIGNAL(pause()), videoPlayer, SLOT(do_pause()));
     connect(this, SIGNAL(updatePosition(int)), videoPlayer, SLOT(do_updatePosition(int)));
+    connect(this, SIGNAL(setVolume(int)), videoPlayer, SLOT(do_volumeChanged(int)));
 
     if(videoPlayer->init())
         qApp->quit();
@@ -141,6 +142,7 @@ void PlayControl::on_horizontalSliderVolume_valueChanged(int value)
 {
     QPoint globalPos = ui->horizontalSliderVolume->mapToGlobal(QPoint(0, 0));
     QToolTip::showText(QPoint(globalPos.x() + ui->horizontalSliderVolume->width() / 2, globalPos.y()), QString::number(ui->horizontalSliderVolume->value()));
+    emit setVolume(value);
 }
 
 

@@ -74,7 +74,7 @@ MXL播放器。
 
 CMake脚本已被调整为默认从互联网下载预构建ffmpeg。请确保构建时互联网连接畅通。您也可以参阅CMakeLists.txt自行配置外部库。
 
-构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets。
+构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets, Qt6Network。
 
 ## 致谢与声明
 
@@ -103,9 +103,3 @@ AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软�
 AVPStudio MXLPlayer基于zlib license使用来自[SDL](https://www.libsdl.org/)的软件。
 
 AVPStudio是在[GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1)下开放源代码的软件。
-
-## 附表 中华人民共和国大陆地区Dolby Cinema部分参数表（2023年7月）
-
-***网友制表，出处见水印。信息仅供参考。***
-
-![](images/cn_dbyc_list_202307.jpg)
