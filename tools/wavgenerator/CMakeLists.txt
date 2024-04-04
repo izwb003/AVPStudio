@@ -23,18 +23,11 @@ if(WIN32)
 endif(WIN32)
 
 # Set Qt executables
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(wavgenerator
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-    qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
-else()
-    add_executable(wavgenerator
-        ${PROJECT_SOURCES}
-    )
-    qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
-endif()
+qt_add_executable(wavgenerator
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+)
+qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 # Link libraries
 target_link_libraries(wavgenerator PRIVATE
@@ -61,6 +54,4 @@ set_target_properties(wavgenerator PROPERTIES
 )
 
 # Qt finalize executable
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(wavgenerator)
-endif()
+qt_finalize_executable(wavgenerator)

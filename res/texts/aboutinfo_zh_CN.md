@@ -12,7 +12,7 @@
 
 ### 测试
 
-[@冷小鸢aque](https://space.bilibili.com/27063907/)    [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)
+[@冷小鸢aque](https://space.bilibili.com/27063907/)    [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)    @蔚晴    @太阳的光芒
 
 ### 影城信息数据
 
@@ -20,7 +20,7 @@
 
 ### 同时提供支持
 
-[@神奇的红毛丹](https://space.bilibili.com/364856318/)    [@多真燐](https://space.bilibili.com/8275564)    @一个复杂精密的好名字    [@努力拉普的寒](https://space.bilibili.com/8295822)    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
+[@神奇的红毛丹](https://space.bilibili.com/364856318/)    [@多真燐](https://space.bilibili.com/8275564)    @一个复杂精密的好名字    [@努力拉普的寒](https://space.bilibili.com/8295822)    [@zmisgod](https://space.bilibili.com/5355691)    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
 
 （以上排名不分先后）
 

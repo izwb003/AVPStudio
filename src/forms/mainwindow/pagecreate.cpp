@@ -21,6 +21,7 @@
 #include "settings.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QMimeData>
 
 void PageCreate::dragEnterEvent(QDragEnterEvent *event)
@@ -63,6 +64,22 @@ void PageCreate::dropEvent(QDropEvent *event)
             QFileInfo fileInfo(fileName);
             if(fileInfo.isFile())
             {
+                QStringList supportedFormat = {"mp4", "mpg", "avi", "mkv", "mov", "flv"};
+                bool isFormatSupported = false;
+                for(QString format : supportedFormat)
+                {
+                    if(fileInfo.suffix().compare(format) == 0)
+                    {
+                        isFormatSupported = true;
+                        break;
+                    }
+                }
+                if(!isFormatSupported)
+                {
+                    QMessageBox::critical(this, tr("错误"), tr("不支持的文件格式。"));
+                    rewriteLabelDragText();
+                    return;
+                }
                 settings.inputVideoPath = fileName;
                 settings.inputVideoInfo = fileInfo;
                 emit editContent();
