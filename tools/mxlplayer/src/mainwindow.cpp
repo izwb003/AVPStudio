@@ -40,6 +40,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setMXLPath(QString mxlPath)
+{
+    ui->lineEditMXLPath->setText(mxlPath);
+}
+
 void MainWindow::do_showError(QString errorTitle, QString errorMsg)
 {
     progressDialog -> close();

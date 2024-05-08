@@ -38,6 +38,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void setMXLPath(QString mxlPath);
+
 private slots:
     void do_showError(QString errorTitle, QString errorMsg);
 
