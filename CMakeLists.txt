@@ -145,3 +145,22 @@ install(TARGETS AVPStudio wavgenerator imageorganizer mxlplayer
 
 # Qt finalize executable
 qt_finalize_executable(AVPStudio)
+
+# Copy windows installer script
+option(BUILD_WINDOWS_INSTALLER "Build Windows Inno Setup installer script or not" ON)
+
+if(WIN32 AND BUILD_WINDOWS_INSTALLER)
+    set(INNOSETUP_APPID "{C3203E73-539C-40AE-9075-2AE99E78AB59}")
+    set(WINDOWS_INSTALLER_GENERATE_PATH ${CMAKE_CURRENT_BINARY_DIR}/../AVPStudio-installer)
+
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/setup/windows/LICENSE_zh_CN.txt.in
+        ${WINDOWS_INSTALLER_GENERATE_PATH}/LICENSE_zh_CN.txt
+        COPYONLY
+    )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/setup/windows/winsetup.iss.in
+        ${WINDOWS_INSTALLER_GENERATE_PATH}/winsetup.iss
+        @ONLY
+    )
+endif(WIN32 AND BUILD_WINDOWS_INSTALLER)

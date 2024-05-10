@@ -22,6 +22,13 @@ if(WIN32)
     )
 endif(WIN32)
 
+# Copy icon
+configure_file(
+    ${CMAKE_SOURCE_DIR}/res/icons/mxlplayer_icon256.ico
+    ${CMAKE_BINARY_DIR}/mxlplayer.ico
+    COPYONLY
+)
+
 # Set Qt executables
 qt_add_executable(mxlplayer
     MANUAL_FINALIZATION

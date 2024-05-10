@@ -26,7 +26,7 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "izwb003 Productions\0"
-            // VALUE "FileDescription", "AVPStudio MXLPlayer, Dolby Cinema signature entrance (AVP) display content player.\0"
+            VALUE "FileDescription", "AVPStudio MXLPlayer\0"
             VALUE "FileVersion", FILE_VERSION_STR
             VALUE "InternalName", "mxlplayer.exe\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 Steven Song (izwb003)\0"
