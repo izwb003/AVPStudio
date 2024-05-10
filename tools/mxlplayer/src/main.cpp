@@ -44,6 +44,14 @@ int main(int argc, char *argv[])
     styleSheetFile.close();
 
     MainWindow w;
+
+    // If turned on with a MXL file specified, fill the MXL Path.
+    if(argc == 2)
+    {
+        QString mxlPath = QString(argv[1]);
+        w.setMXLPath(mxlPath);
+    }
+
     w.show();
     return a.exec();
 }

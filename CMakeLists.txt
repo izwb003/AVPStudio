@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(AVPStudio VERSION 0.2.2 LANGUAGES CXX)
+project(AVPStudio VERSION 0.3.0 LANGUAGES CXX)
 
 # Link ffmpeg
 if(WIN32)
@@ -92,18 +92,11 @@ add_definitions(
 )
 
 # Set Qt executables
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(AVPStudio
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-    qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
-else()
-    add_executable(AVPStudio
-        ${PROJECT_SOURCES}
-    )
-    qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
-endif()
+qt_add_executable(AVPStudio
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+)
+qt_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 # Configure executable include rules
 target_include_directories(AVPStudio PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -151,6 +144,23 @@ install(TARGETS AVPStudio wavgenerator imageorganizer mxlplayer
 )
 
 # Qt finalize executable
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(AVPStudio)
-endif()
+qt_finalize_executable(AVPStudio)
+
+# Copy windows installer script
+option(BUILD_WINDOWS_INSTALLER "Build Windows Inno Setup installer script or not" ON)
+
+if(WIN32 AND BUILD_WINDOWS_INSTALLER)
+    set(INNOSETUP_APPID "{C3203E73-539C-40AE-9075-2AE99E78AB59}")
+    set(WINDOWS_INSTALLER_GENERATE_PATH ${CMAKE_CURRENT_BINARY_DIR}/../AVPStudio-installer)
+
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/setup/windows/LICENSE_zh_CN.txt.in
+        ${WINDOWS_INSTALLER_GENERATE_PATH}/LICENSE_zh_CN.txt
+        COPYONLY
+    )
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/setup/windows/winsetup.iss.in
+        ${WINDOWS_INSTALLER_GENERATE_PATH}/winsetup.iss
+        @ONLY
+    )
+endif(WIN32 AND BUILD_WINDOWS_INSTALLER)

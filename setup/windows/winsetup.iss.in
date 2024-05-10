@@ -1,0 +1,79 @@
+﻿#define MyAppName "AVPStudio"
+#define MyAppVersion "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@"
+#define MyAppPublisher "izwb003 Productions"
+#define MyAppURL "https://github.com/izwb003/AVPStudio"
+#define MyAppExeName "AVPStudio.exe"
+
+[Setup]
+AppId={@INNOSETUP_APPID@
+AppName={#MyAppName}
+AppVersion={#MyAppVersion}
+;AppVerName={#MyAppVersion}
+AppPublisher={#MyAppPublisher}
+AppPublisherURL={#MyAppURL}
+AppSupportURL={#MyAppURL}
+AppUpdatesURL={#MyAppURL}
+ArchitecturesAllowed=x64 ia64
+ArchitecturesInstallIn64BitMode=x64 ia64
+DefaultDirName={autopf}\{#MyAppName}
+DefaultGroupName={#MyAppName}
+DisableWelcomePage=no
+LicenseFile=./LICENSE_zh_CN.txt
+;PrivilegesRequired=lowest
+PrivilegesRequiredOverridesAllowed=commandline
+OutputDir=@CMAKE_CURRENT_BINARY_DIR@\..\AVPStudio-installer
+OutputBaseFilename={#MyAppName}_{#MyAppVersion}_Windows_x64_Setup
+SetupIconFile=@CMAKE_SOURCE_DIR@\res\icons\icon256.ico
+Compression=lzma
+SolidCompression=yes
+Uninstallable=yes
+UninstallDisplayIcon=@CMAKE_SOURCE_DIR@\res\icons\icon256.ico
+UninstallDisplayName={#MyAppName}
+VersionInfoCompany={#MyAppPublisher}
+VersionInfoCopyright=Copyright (C) {#MyAppPublisher}. Licensed Under GNU GPLv2.
+VersionInfoProductVersion={#MyAppVersion}
+VersionInfoVersion=@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0
+WizardStyle=modern
+
+[Languages]
+Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+
+[CustomMessages]
+WebsiteWord=%1 开放源代码
+AssociateMXLWord=关联.mxl文件到MXLPlayer
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "associateMXL"; Description: "{cm:AssociateMXLWord}"; Flags: checkedonce
+
+[Files]
+Source: "@CMAKE_CURRENT_BINARY_DIR@\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "@CMAKE_CURRENT_BINARY_DIR@\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Registry]
+Root: HKA; Subkey: "Software\Classes\Applications\mxlplayer.exe"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "AVPStudio MXLPlayer"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\Applications\mxlplayer.exe\SupportedTypes"; ValueType: string; ValueName: ".mxl"; ValueData: ""; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Clients\Media\MXLPlayer\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Dolby Cinema AVP MXL file player"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Clients\Media\MXLPlayer\Capabilities"; ValueType: string; ValueName: "ApplicationName"; ValueData: "AVPStudio MXLPlayer"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Clients\Media\MXLPlayer\Capabilities\FileAssociations"; ValueType: string; ValueName: ".mxl"; ValueData: "MXLPlayer.mxl"; Flags: uninsdeletekey; Tasks: associateMXL
+Root: HKA; Subkey: "Software\RegisteredApplications"; ValueType: string; ValueName: "MXLPlayer"; ValueData: "Software\Clients\Media\MXLPlayer\Capabilities"; Flags: uninsdeletekey
+Root: HKCR; Subkey: ".mxl"; ValueType: string; ValueName: ""; ValueData: "MXLPlayer.mxl"; Tasks: associateMXL
+Root: HKCR; Subkey: "MXLPlayer.mxl"; ValueType: string; ValueName: ""; ValueData: "Christie PandorasBox MPEG Video"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "MXLPlayer.mxl\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\mxlplayer.ico, 0"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "MXLPlayer.mxl\shell\Open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\mxlplayer.exe"" ""%1"""; Flags: uninsdeletekey 
+
+[Icons]
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\WAVGenerator"; Filename: "{app}\wavgenerator.exe"
+Name: "{group}\ImageOrganizer"; Filename: "{app}\imageorganizer.exe"
+Name: "{group}\MXLPlayer"; Filename: "{app}\mxlplayer.exe"
+Name: "{group}\{cm:WebsiteWord,{#MyAppName}}"; Filename: "{#MyAppURL}"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autodesktop}\WAVGenerator"; Filename: "{app}\wavgenerator.exe"; Tasks: desktopicon
+Name: "{autodesktop}\ImageOrganizer"; Filename: "{app}\imageorganizer.exe"; Tasks: desktopicon
+Name: "{autodesktop}\MXLPlayer"; Filename: "{app}\mxlplayer.exe"; Tasks: desktopicon
+
+[Run]
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+

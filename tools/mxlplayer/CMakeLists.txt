@@ -22,19 +22,19 @@ if(WIN32)
     )
 endif(WIN32)
 
+# Copy icon
+configure_file(
+    ${CMAKE_SOURCE_DIR}/res/icons/mxlplayer_icon256.ico
+    ${CMAKE_BINARY_DIR}/mxlplayer.ico
+    COPYONLY
+)
+
 # Set Qt executables
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(mxlplayer
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-else()
-    add_executable(mxlplayer
-        ${PROJECT_SOURCES}
-    )
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif()
+qt_add_executable(mxlplayer
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+)
+qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 # Link libraries
 target_link_libraries(mxlplayer PRIVATE
@@ -63,6 +63,4 @@ set_target_properties(mxlplayer PROPERTIES
 )
 
 # Qt finalize executable
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(mxlplayer)
-endif()
+qt_finalize_executable(mxlplayer)

@@ -1,33 +1,4 @@
-## AVPStudio
-
-杜比影院动态视听走廊播放内容创建工具。
-
-### 编写者
-
-[@izwb003](https://space.bilibili.com/36937211)
-
-### 原理证明
-
-[@筱理_Rize](https://space.bilibili.com/3848521)
-
-### 测试
-
-[@冷小鸢aque](https://space.bilibili.com/27063907/)    [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)    @蔚晴    @太阳的光芒
-
-### 影城信息数据
-
-[@步平凡x](https://weibo.com/n/%E6%AD%A5%E5%B9%B3%E5%87%A1x)
-
-### 同时提供支持
-
-[@神奇的红毛丹](https://space.bilibili.com/364856318/)    [@多真燐](https://space.bilibili.com/8275564)    @一个复杂精密的好名字    [@努力Rap的寒](https://space.bilibili.com/8295822)    [@zmisgod](https://space.bilibili.com/5355691)    @还有这种事？    @茶.    @R.M.Dolby    @Schon    @WuChangXD    @妙木山蛤蟆仙人
-
-（以上排名不分先后）
-
-### 程序资源设计
-[iconfont矢量图标库](https://www.iconfont.cn/)
-
-### 版权与责任声明
+﻿		AVPStudio版权与责任声明
 
 杜比®、杜比影院®、Dolby®、Dolby Cinema®是杜比实验室国际有限公司的注册商标。
 
@@ -39,17 +10,10 @@ AVPStudio与杜比实验室、科视数字系统有限公司无关。AVPStudio�
 
 根据《GNU通用公共许可协议》第十一、十二条，本程序为免费授权，故在适用法律范围内不提供品质担保。除非另作书面声明，版权持有人及其他程序提供者“概”不提供任何显式或隐式的品质担保，品质担保所指包括而不仅限于有经济价值和适合特定用途的保证。全部风险，如程序的质量和性能问题，皆由你承担。若程序出现缺陷，你将承担所有必要的修复和更正服务的费用。除非适用法律或书面协议要求，任何版权持有人或本程序按本协议可能存在的第三方修改和再发布者，都不对你的损失负有责任，包括由于使用或者不能使用本程序造成的任何一般的、特殊的、偶发的或重大的损失（包括而不仅限于数据丢失、数据失真、你或第三方的后续损失、其他程序无法与本程序协同运作），即使那些人声称会对此负责。
 
-### 第三方软件
 
-AVPStudio基于Qt许可证使用Qt6技术。
+		AVPStudio开放源代码许可
 
-AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软件。它的源代码可以在[GitHub](https://github.com/izwb003/AVPStudio)下载。
 
-AVPStudio MXLPlayer基于zlib license使用来自[SDL](https://www.libsdl.org/)的软件。
-
-### 开放源代码许可
-
-```
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
@@ -330,4 +294,62 @@ PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGES.
 
                      END OF TERMS AND CONDITIONS
-```
+
+            How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+convey the exclusion of warranty; and each file should have at least
+the "copyright" line and a pointer to where the full notice is found.
+
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+Also add information on how to contact you by electronic and paper mail.
+
+If the program is interactive, make it output a short notice like this
+when it starts in an interactive mode:
+
+    Gnomovision version 69, Copyright (C) year name of author
+    Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `show c' for details.
+
+The hypothetical commands `show w' and `show c' should show the appropriate
+parts of the General Public License.  Of course, the commands you use may
+be called something other than `show w' and `show c'; they could even be
+mouse-clicks or menu items--whatever suits your program.
+
+You should also get your employer (if you work as a programmer) or your
+school, if any, to sign a "copyright disclaimer" for the program, if
+necessary.  Here is a sample; alter the names:
+
+  Yoyodyne, Inc., hereby disclaims all copyright interest in the program
+  `Gnomovision' (which makes passes at compilers) written by James Hacker.
+
+  <signature of Ty Coon>, 1 April 1989
+  Ty Coon, President of Vice
+
+This General Public License does not permit incorporating your program into
+proprietary programs.  If your program is a subroutine library, you may
+consider it more useful to permit linking proprietary applications with the
+library.  If this is what you want to do, use the GNU Lesser General
+Public License instead of this License.

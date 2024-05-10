@@ -82,7 +82,7 @@ AVPStudio的诞生离不开[@筱理_Rize](https://space.bilibili.com/3848521/)�
 
 AVPStudio需要致谢[@冷小鸢aque](https://space.bilibili.com/27063907/)和[@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)在实践中得出的测试结论。
 
-更多致谢信息，请参阅软件的“关于”页面。
+更多致谢信息，请参阅软件的[“关于”](res/texts/aboutinfo_zh_CN.md)页面。
 
 杜比®、杜比影院®、Dolby®、Dolby Cinema®是杜比实验室国际有限公司的注册商标。
 
