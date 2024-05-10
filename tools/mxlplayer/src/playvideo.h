@@ -24,6 +24,21 @@
 
 #include <QThread>
 
+#include <SDL.h>
+
+extern "C" {
+#include <libavutil/avutil.h>
+#include <libavutil/audio_fifo.h>
+#include <libavutil/imgutils.h>
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+#include <libavfilter/avfilter.h>
+#include <libavfilter/buffersrc.h>
+#include <libavfilter/buffersink.h>
+#include <libswscale/swscale.h>
+#include <libswresample/swresample.h>
+}
+
 class TPlayVideo : public QThread
 {
     Q_OBJECT
@@ -35,6 +50,10 @@ public:
     void cleanup();
 
     void notifyQuit();
+
+    int SDLAudioDecoderInternal(void *opaque);
+
+    void SDLFillAudioInternal(void *data, uint8_t *stream, int length);
 
 signals:
     void showError(QString errorMsg);
@@ -53,6 +72,56 @@ private:
     int AVPHeight = 1080;
 
     int newPosition = 0;
+
+    AVFormatContext *videoFmtCxt = NULL;
+    int videoStreamID = 0;
+    AVFormatContext *audioFmtCxt = NULL;
+    int audioStreamID = 0;
+
+    const AVCodec *videoDecoder = NULL;
+    AVCodecContext *videoDecoderCxt = NULL;
+    const AVCodec *audioDecoder = NULL;
+    AVCodecContext *audioDecoderCxt = NULL;
+
+    AVFilterGraph *videoFilterGraph = NULL;
+    AVFilterInOut *videoFilterInput = NULL;
+    AVFilterInOut *videoFilterOutput = NULL;
+
+    const AVFilter *videoFilterSrc = NULL;
+    AVFilterContext *videoFilterSrcCxt = NULL;
+    const AVFilter *videoFilterSink = NULL;
+    AVFilterContext *videoFilterSinkCxt = NULL;
+
+    SwsContext *scalerCxt = NULL;
+    SwrContext *resamplerCxt = NULL;
+
+    AVPacket *vPacket = NULL;
+    AVPacket *aPacket = NULL;
+    AVFrame *frameIn = NULL;
+    AVFrame *frameFiltered = NULL;
+    AVFrame *frameScaled = NULL;
+    AVFrame *frame = NULL;
+
+    int iAudioBufferSize = 0;
+    int iAudioBufferSampleCount = 0;
+    uint8_t *iAudioBuffer = NULL;
+    int oAudioBufferSize = 0;
+    int oAudioBufferSampleCount = 0;
+    uint8_t *oAudioBuffer = NULL;
+
+    AVAudioFifo *audioQueue = NULL;
+    SDL_mutex *audioQueueMutex = NULL;
+
+    int volume = 50;
+    SDL_mutex *volumeMutex = NULL;
+
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+    SDL_Texture *texture = NULL;
+    SDL_Thread *threadRefresh = NULL;
+    SDL_Thread *threadDecodeAudio = NULL;
+    SDL_Event eventSDL;
+    SDL_AudioSpec wantedSpec;
 
 private slots:
     void do_updatePosition(int val);

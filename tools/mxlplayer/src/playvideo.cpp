@@ -41,6 +41,8 @@ extern "C" {
 
 #define MAX_AUDIO_FRAME_SIZE 192000 // 1 second of 48khz 32bit audio
 
+TPlayVideo *player = NULL;
+
 /*
  * Flag to control the behavior of the SDL refresher.
  * case 0: Play normally.
@@ -67,56 +69,6 @@ static const char *filterGraphSmall =
     "[in2]crop=658:1080:1513:1080[right];"
     "[left][right]hstack=2[out]";
 
-static AVFormatContext *videoFmtCxt = NULL;
-static int videoStreamID = 0;
-static AVFormatContext *audioFmtCxt = NULL;
-static int audioStreamID = 0;
-
-static const AVCodec *videoDecoder = NULL;
-static AVCodecContext *videoDecoderCxt = NULL;
-static const AVCodec *audioDecoder = NULL;
-static AVCodecContext *audioDecoderCxt = NULL;
-
-static AVFilterGraph *videoFilterGraph = NULL;
-static AVFilterInOut *videoFilterInput = NULL;
-static AVFilterInOut *videoFilterOutput = NULL;
-
-static const AVFilter *videoFilterSrc = NULL;
-static AVFilterContext *videoFilterSrcCxt = NULL;
-static const AVFilter *videoFilterSink = NULL;
-static AVFilterContext *videoFilterSinkCxt = NULL;
-
-static SwsContext *scalerCxt = NULL;
-static SwrContext *resamplerCxt = NULL;
-
-static AVPacket *vPacket = NULL;
-static AVPacket *aPacket = NULL;
-static AVFrame *frameIn = NULL;
-static AVFrame *frameFiltered = NULL;
-static AVFrame *frameScaled = NULL;
-static AVFrame *frame = NULL;
-
-static int iAudioBufferSize = 0;
-static int iAudioBufferSampleCount = 0;
-static uint8_t *iAudioBuffer = NULL;
-static int oAudioBufferSize = 0;
-static int oAudioBufferSampleCount = 0;
-static uint8_t *oAudioBuffer = NULL;
-
-static AVAudioFifo *audioQueue = NULL;
-static SDL_mutex *audioQueueMutex = NULL;
-
-static int volume = 50;
-static SDL_mutex *volumeMutex = NULL;
-
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
-static SDL_Texture *texture = NULL;
-static SDL_Thread *threadRefresh = NULL;
-static SDL_Thread *threadDecodeAudio = NULL;
-static SDL_Event eventSDL;
-static SDL_AudioSpec wantedSpec;
-
 static int SDLRefresher(void *opaque)
 {
     SDL_Event refreshEvent;
@@ -140,61 +92,12 @@ static int SDLRefresher(void *opaque)
 
 static int SDLAudioDecoder(void *opaque)
 {
-    static int avError = 0;
-
-    while(true)
-    {
-        SDL_LockMutex(refresherFlagMutex);
-        if(refresherFlag != 0)
-            continue;
-        SDL_UnlockMutex(refresherFlagMutex);
-
-        if(av_read_frame(audioFmtCxt, aPacket) == 0)
-        {
-            if(aPacket->stream_index == audioStreamID)
-            {
-                avError = avcodec_send_packet(audioDecoderCxt, aPacket);
-                while(true)
-                {
-                    avError = avcodec_receive_frame(audioDecoderCxt, frame);
-                    if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
-                        break;
-
-                    iAudioBufferSampleCount = swr_convert(resamplerCxt, &iAudioBuffer, MAX_AUDIO_FRAME_SIZE, (const uint8_t**)frame->data, frame->nb_samples);
-
-                    iAudioBufferSize = av_samples_get_buffer_size(0, frame->ch_layout.nb_channels, iAudioBufferSampleCount, AV_SAMPLE_FMT_S16, 1);
-
-                    while(iAudioBufferSampleCount > av_audio_fifo_space(audioQueue));
-                    SDL_LockMutex(audioQueueMutex);
-                    avError = av_audio_fifo_write(audioQueue, (void**)&iAudioBuffer, iAudioBufferSampleCount);
-                    SDL_UnlockMutex(audioQueueMutex);
-
-                    av_frame_unref(frame);
-                }
-                av_packet_unref(aPacket);
-            }
-        }
-        else
-            SDL_PauseAudio(1);
-    }
-
-    return 0;
+    return player->SDLAudioDecoderInternal(opaque);
 }
 
 static void SDLFillAudio(void *data, uint8_t *stream, int length)
 {
-    SDL_memset(stream, 0, length);
-    SDL_LockMutex(audioQueueMutex);
-    oAudioBufferSampleCount = av_audio_fifo_read(audioQueue, (void**)&oAudioBuffer, length / 4);
-    SDL_UnlockMutex(audioQueueMutex);
-    if(oAudioBufferSampleCount <= 0)
-        return;
-    oAudioBufferSize = av_samples_get_buffer_size(0, audioDecoderCxt->ch_layout.nb_channels, oAudioBufferSampleCount, AV_SAMPLE_FMT_S16, 1);
-    if(oAudioBufferSize <= 0)
-        return;
-    SDL_LockMutex(volumeMutex);
-    SDL_MixAudio(stream, oAudioBuffer, oAudioBufferSize, volume);
-    SDL_UnlockMutex(volumeMutex);
+    return player->SDLFillAudioInternal(data, stream, length);
 }
 
 TPlayVideo::TPlayVideo(QObject *parent, QString mxlPath, QString wavPath, AVP::AVPSize size)
@@ -217,6 +120,8 @@ TPlayVideo::TPlayVideo(QObject *parent, QString mxlPath, QString wavPath, AVP::A
         AVPWidth = 2830;
         break;
     }
+
+    player = this;
 }
 
 int TPlayVideo::init()
@@ -470,6 +375,65 @@ void TPlayVideo::notifyQuit()
     SDL_Event quitEvent;
     quitEvent.type = SDL_CUSTOM_QUIT_EVENT;
     SDL_PushEvent(&quitEvent);
+}
+
+int TPlayVideo::SDLAudioDecoderInternal(void *opaque)
+{
+    static int avError = 0;
+
+    while(true)
+    {
+        SDL_LockMutex(refresherFlagMutex);
+        if(refresherFlag != 0)
+            continue;
+        SDL_UnlockMutex(refresherFlagMutex);
+
+        if(av_read_frame(audioFmtCxt, aPacket) == 0)
+        {
+            if(aPacket->stream_index == audioStreamID)
+            {
+                avError = avcodec_send_packet(audioDecoderCxt, aPacket);
+                while(true)
+                {
+                    avError = avcodec_receive_frame(audioDecoderCxt, frame);
+                    if(avError == AVERROR(EAGAIN) || avError == AVERROR_EOF)
+                        break;
+
+                    iAudioBufferSampleCount = swr_convert(resamplerCxt, &iAudioBuffer, MAX_AUDIO_FRAME_SIZE, (const uint8_t**)frame->data, frame->nb_samples);
+
+                    iAudioBufferSize = av_samples_get_buffer_size(0, frame->ch_layout.nb_channels, iAudioBufferSampleCount, AV_SAMPLE_FMT_S16, 1);
+
+                    while(iAudioBufferSampleCount > av_audio_fifo_space(audioQueue));
+                    SDL_LockMutex(audioQueueMutex);
+                    avError = av_audio_fifo_write(audioQueue, (void**)&iAudioBuffer, iAudioBufferSampleCount);
+                    SDL_UnlockMutex(audioQueueMutex);
+
+                    av_frame_unref(frame);
+                }
+                av_packet_unref(aPacket);
+            }
+        }
+        else
+            SDL_PauseAudio(1);
+    }
+
+    return 0;
+}
+
+void TPlayVideo::SDLFillAudioInternal(void *data, uint8_t *stream, int length)
+{
+    SDL_memset(stream, 0, length);
+    SDL_LockMutex(audioQueueMutex);
+    oAudioBufferSampleCount = av_audio_fifo_read(audioQueue, (void**)&oAudioBuffer, length / 4);
+    SDL_UnlockMutex(audioQueueMutex);
+    if(oAudioBufferSampleCount <= 0)
+        return;
+    oAudioBufferSize = av_samples_get_buffer_size(0, audioDecoderCxt->ch_layout.nb_channels, oAudioBufferSampleCount, AV_SAMPLE_FMT_S16, 1);
+    if(oAudioBufferSize <= 0)
+        return;
+    SDL_LockMutex(volumeMutex);
+    SDL_MixAudio(stream, oAudioBuffer, oAudioBufferSize, volume);
+    SDL_UnlockMutex(volumeMutex);
 }
 
 void TPlayVideo::do_updatePosition(int val)
