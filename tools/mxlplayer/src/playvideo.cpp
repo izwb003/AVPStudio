@@ -225,12 +225,6 @@ int TPlayVideo::init()
             cleanup();
             return avError;
         }
-        if(audioDecoderCxt->ch_layout.nb_channels > 2)
-        {
-            emit showError(tr("由于软件限制，MXLPlayer暂不能回放非单声道/立体声配置的WAV音频。\n这并不会影响您的WAV文件正常在杜比影院设备上的播放。\n您可以使用其它音频播放器检视该WAV音频文件。"));
-            cleanup();
-            return avError;
-        }
     }
 
     // Init filter
@@ -424,7 +418,7 @@ void TPlayVideo::SDLFillAudioInternal(void *data, uint8_t *stream, int length)
 {
     SDL_memset(stream, 0, length);
     SDL_LockMutex(audioQueueMutex);
-    oAudioBufferSampleCount = av_audio_fifo_read(audioQueue, (void**)&oAudioBuffer, length / 4);
+    oAudioBufferSampleCount = av_audio_fifo_read(audioQueue, (void**)&oAudioBuffer, length / (audioDecoderCxt->ch_layout.nb_channels * 2));
     SDL_UnlockMutex(audioQueueMutex);
     if(oAudioBufferSampleCount <= 0)
         return;
