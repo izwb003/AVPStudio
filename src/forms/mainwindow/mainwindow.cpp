@@ -229,3 +229,27 @@ void MainWindow::on_actionCheckUpdate_triggered()
     QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio/releases")));
 }
 
+
+void MainWindow::on_action_help_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio/blob/master/README.md")));
+}
+
+
+void MainWindow::on_action_report_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://github.com/izwb003/AVPStudio/issues")));
+}
+
+
+void MainWindow::on_action_follow_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://space.bilibili.com/36937211")));
+}
+
+
+void MainWindow::on_action_donate_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QString("https://b23.tv/cEH1bNr")));
+}
+

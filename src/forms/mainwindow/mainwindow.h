@@ -61,5 +61,9 @@ private slots:
     void on_actionMXLPlayer_triggered();
     void on_actionOpenSource_triggered();
     void on_actionCheckUpdate_triggered();
+    void on_action_help_triggered();
+    void on_action_report_triggered();
+    void on_action_follow_triggered();
+    void on_action_donate_triggered();
 };
 #endif // MAINWINDOW_H
