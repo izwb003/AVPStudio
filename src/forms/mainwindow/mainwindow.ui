@@ -48,7 +48,12 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionOpenSource"/>
+    <addaction name="action_report"/>
     <addaction name="actionCheckUpdate"/>
+    <addaction name="separator"/>
+    <addaction name="action_help"/>
+    <addaction name="action_follow"/>
+    <addaction name="action_donate"/>
    </widget>
    <widget class="QMenu" name="menu_T">
     <property name="title">
@@ -132,6 +137,26 @@
   <action name="actionCheckUpdate">
    <property name="text">
     <string>检查更新...</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="text">
+    <string>帮助...</string>
+   </property>
+  </action>
+  <action name="action_report">
+   <property name="text">
+    <string>报告问题</string>
+   </property>
+  </action>
+  <action name="action_follow">
+   <property name="text">
+    <string>关注与支持</string>
+   </property>
+  </action>
+  <action name="action_donate">
+   <property name="text">
+    <string>捐赠</string>
    </property>
   </action>
  </widget>

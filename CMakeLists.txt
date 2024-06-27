@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(AVPStudio VERSION 0.3.1 LANGUAGES CXX)
+project(AVPStudio VERSION 0.3.2 LANGUAGES CXX)
 
 # Link ffmpeg
 if(WIN32)

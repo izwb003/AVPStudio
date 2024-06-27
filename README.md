@@ -1,105 +1,127 @@
 # AVPStudio
-杜比影院动态视听走廊显示内容制作工具。
+Dolby Cinema signature entrance (AVP) display content production tool.
 
-## 简介
-部分杜比影院在影厅入口处建设有动态视听走廊系统。该系统使用由科视数字系统公司（Christie Digital）研发的科视Christie® 潘多拉魔盒®系列媒体和显示控制系统，使用多个超短焦投影仪投影多个相邻画面并进行几何校正与边缘融合，实现在白墙上呈现出一个颇具沉浸感的长画面，以在观众进入影厅前营造观影氛围。
+[简体中文](/README_zh_CN.md)
 
-制作适配于科视Christie® 潘多拉魔盒®系统的内容需要使用由科视数字系统公司研发的专业内容创建软件及相关工具。遗憾的是，这些工具售价昂贵且授权门槛较高，不适合于观影活动等DIY目的应用。然而，杜比影院所使用的潘多拉魔盒®软件已经预设好了一种画面分离模板，我们只需参照该模板就可以选择制作一种特殊排列规格的视频并将其添加至潘多拉魔盒®时间线，即可产生近似于杜比官方内容的沉浸式显示效果。
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/izwb003/AVPStudio/total)
+![GitHub Release](https://img.shields.io/github/v/release/izwb003/AVPStudio)
+![GitHub last commit](https://img.shields.io/github/last-commit/izwb003/AVPStudio)
+![Follow bilibili](https://img.shields.io/badge/follow_me-on_bilibili-blue?logo=bilibili&link=https%3A%2F%2Fspace.bilibili.com%2F36937211)
+![GitHub Repo stars](https://img.shields.io/github/stars/izwb003/AVPStudio)
 
-AVPStudio是一个编码工具。它可以将任意视频按照该预设的分离模板重新排列并编码为潘多拉魔盒®系统所支持的格式，从而实现自制动态视听走廊的播放内容，在观影活动等需要投影自制内容的情况下应用。
 
-## 使用说明
+## Introduction
+Some Dolby Cinemas have an AVP system built at the entrance of the cinema. This system uses Christie PandorasBox®, a technology developed by Christie Digital® which use multiple ultra short focus projectors to project multiple adjacent images, perform geometric correction and edge fusion, and present an immersive long image on a white wall to create a viewing atmosphere for the audience before entering the theater.
 
-### 素材准备
-杜比影院动态视听走廊具有三种不同的规格。三种规格的具体参数如下：
+Making contents for Christie® PandorasBox® system requires the use of professional content creation software and related tools developed by Christie Digital. Unfortunately, these tools are expensive and have a high authorization threshold, making them unsuitable for DIY purposes such as movie watching activities. However, the PandorasBox system used by Dolby Cinema® has preset a screen separation template, and we only need to refer to this template to choose a special arrangement specification video and add it to PandorasBox® timeline to generate an immersive display effect similar to Dolby's official content.
 
-| 规格   | 尺寸        | 分辨率        | 音频轨道         |
+AVPStudio is an encoding tool. It can rearrange and encode any video into a PandorasBox® playable video according to the preset separation template format supported by the system, enables the playback of self-made AVP contents, which can be applied in situations where self-made content needs to be projected during activities.
+
+## Instructions
+**Note: This program is only applicable to Dolby AVP V2. Other types of configurations have not been tested. AVPStudio does not guarantee availability for other types of configurations.**
+
+### I'm not familiar with programming. Where should I download and run it?
+Please visit [this link](https://github.com/izwb003/AVPStudio/releases/latest) to download the latest version of executable programs and install them into your computer.
+
+### Video preparation
+Dolby Cinema®'s AVPs have three different specifications. The specific parameters for the three specifications are as follows:
+| Spec   | Size        | Resolution    | Audio Track      |
 | ------ | ----------- | ------------- | ---------------- |
 | Small  | 5.5m x 2.1m | 2830W x 1080H | 7.1 PCM Surround |
 | Medium | 9m x 2.1m   | 4633W x 1080H | 7.1 PCM Surround |
 | Large  | 12m x 2.1m  | 6167W x 1080H | 7.1 PCM Surround |
 
-有关目标影院的具体规格，可向影院工作人员咨询。若对方无法透露准确信息，可自行对实际投影区域进行测量。
+For specific specifications of the target cinema, please consult the cinema staff. If they are unable to disclose accurate information, you can measure the actual projection area by yourself.
 
-确认规格后，请以目标规格的分辨率制作内容视频。务必留意：
+> Hint:
+> You can learn about the specification of the AVP by consulting the official video/audio file sent by Dolby to the cinema. For V2 configuration, the file naming convention is as follows:
+> V2_Name_audio_all.wav
+> V2_Name_video_Xm.mxl
+> X refers to the width of the AVP of this cinema.
 
-- 根据默认配置，视频将自动循环播放。故请考虑好首尾衔接。
-- 影片长度不可过长。
-- 请制作常见的普通规格SDR视频，并控制码率在合理范围内。建议考虑使用CBR。不要尝试制作高规格内容，可能会面临不兼容问题。
-- 音频声道最高为7.1声道。5.1或立体声也会受到支持。
-- 尽可能调低音频音量。否则会影响影厅内观影体验。
+AVPStudio also provides a reference table that provides configuration specifications for some known cinemas.
 
-### 转换操作
-- 启动AVPStudio，选择您的目标影院的走廊尺寸，单击“创建内容”。
-- 拖放您制作好的目标规格的分辨率视频到程序窗口中，或单击“浏览”选择视频文件。
-- 播放并预览画面效果，在右侧“输出设置”中确认必要的设置。
-- 单击“导出放映内容”，等待程序运行完成。
-- 联系影院技术人员，将生成的```.mxl```视频文件及```.wav```音频文件拷贝进影院潘多拉魔盒®系统，并按与添加杜比官方内容相同的方法将内容拖入时间线。
+After confirming the specifications, please create the content video at the resolution of the target specification. Be sure to pay attention to:
 
-### 我的内容未播放完毕即自动跳转回到了开头播放，怎么办？
-请仔细观察潘多拉魔盒®系统的时间线，留意图中所框出的两个“cue”标记：
+- According to the default configuration, the video will automatically loop through. Therefore, please consider the transition from beginning to end.
+- The length of the film cannot be too long.
+- Please create common standard SDR videos and control the bit rate within a reasonable range. Suggest considering using CBR. Do not attempt to create high specification content as it may face compatibility issues.
+- The maximum audio channel is 7.1 channels. 5.1 or stereo will also be supported.
+- Try to lower the audio volume as much as possible. Otherwise, it will affect the viewing experience in the cinema.
+- The standard generally requires video width or height to be even. Therefore, the video you edited may have an even resolution (4632x1080 or 6166x1080), which is normal and can be processed correctly by AVPStudio.
+
+### Conversion
+- Start AVPStudio, select the corridor size of your target cinema, and click "Create".
+- Drag and drop the video you have created into the program window, or click "browse" to select the video file.
+- Play and preview the screen effect, and confirm the necessary settings in the "Output Settings" on the right.
+- Click "Export" and wait for the program to finish running.
+- Contact the engineer of the cinema to copy the generated video files and audio files into the PandorasBox® system in the cinema and drag the content onto the timeline using the same method as adding official Dolby content.
+
+### What should I do if my content automatically jumps back to the beginning before it finishes playing?
+Please pay attention to PandorasBox®'s timeline, pay attention to the two "cue" markers highlighted in the picture:
 
 ![](images/pandorasbox_timeline_mark_hint.jpg)
 
-您的视频将从“![](images/pandorasbox_start_mark.png)”标记开始播放，播放至“![](images/pandorasbox_cue_mark.png)”即自动返回“![](images/pandorasbox_start_mark.png)”标记处循环播放。您可以按住并拖动“![](images/pandorasbox_cue_mark.png)”标记来调整它的位置。如图所示：
+Your video will be played from "![](images/pandorasbox_start_mark.png)" mark and ends at "![](images/pandorasbox_cue_mark.png)" mark, then jump back to "![](images/pandorasbox_start_mark.png)" mark to form a loop. You can click and drag the "![](images/pandorasbox_cue_mark.png)" mark to adjust its position like following:
 
 ![](images/pandorasbox_drag_cue.jpg)
 
-这样，通过将“![](images/pandorasbox_cue_mark.png)”拉至更远的位置（甚至视频末尾），即可让循环（cue）持续时间更长以避免中途返回开头。
+Thus, by dragging "![](images/pandorasbox_cue_mark.png)" mark to a further position (even the end of the video), you can make the loop (cue) to be longer in order to avoid jumping back to the beginning while playing.
 
-## 附加工具
+## Additional Tools
 
 ### AVPStudio ImageOrganizer
-用于将图片构建为符合杜比影院动态视听走廊分离画面的图片工具。
+A picture tool used to construct images that conform to the AVP separation templete of Dolby Cinema®.
 
-若您的放映内容仅为单张静态图片，该工具可以省去制作视频的工作。
+If your screening content is only a single static image, this tool can save the time of creating videos.
 
 ### AVPStudio WAVGenerator
-用于生成音频WAV的工具。
+A tool for generating audio WAV file.
 
-可搭配ImageOrganizer用于为图片放映内容添加背景音乐，亦可用于及时调整WAV音频的音量大小。
+It can work together with ImageOrganizer to add background musics for image contents, and also can be used to adjust the volume of the WAV audio.
 
 ### AVPStudio MXLPlayer
-MXL播放器。
+MXL file player.
 
-可播放转换完成的（或者官方的）mxl文件预览实际放映效果，亦可将mxl文件转换为H264 MP4视频。
+A tool for playing converted (or official) mxl file to preview, and also can convert mxl file into H264 mp4 videos.
 
-## 技术信息
+## Technical Information
 
-### 原理说明
-有关实现的具体原理及画面结构，请参阅[此专栏](https://www.bilibili.com/read/cv27334455/)。
+### Principle explaination
+For specific principles and screen structure of the implementation, please refer to [this document](https://www.bilibili.com/read/cv27334455/) (written with Simplified Chinese).
 
-### 构建说明
-截至目前，软件仅在Windows环境下调试并测试通过，尚未针对Linux及macOS环境进行配置与调试。
+### Construct and compile note
+As of now, the software has only been debugged and tested under a Windows environment, and has not yet been configured and debugged for Linux and macOS environments.
 
-CMake脚本已被调整为默认从互联网下载预构建ffmpeg。请确保构建时互联网连接畅通。您也可以参阅CMakeLists.txt自行配置外部库。
+CMake scripts have been adjusted to download pre built ffmpeg from the Internet by default. Please ensure that the Internet connection is unblocked when building. You can also refer to CMakeLists.txt to configure external libraries yourself.
 
-构建需要完整的Qt6环境。项目必须使用以下Qt库：Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets, Qt6Network。
+Building requires a complete Qt6 environment. The project must use the following Qt libraries: Qt6Core, Qt6Widgets, Qt6Multimedia, Qt6MultimediaWidgets, Qt6Network.
 
-## 致谢与声明
+## Acknowledgements and Announcements
+The birth of AVPStudio cannot be separated from [@筱理_Rize](https://space.bilibili.com/3848521/)'s exploration results. All implementation principles of this software have been derived by @筱理_Rize through communication, self testing, and experience.
 
-AVPStudio的诞生离不开[@筱理_Rize](https://space.bilibili.com/3848521/)先生的探索结果。本软件的所有实现原理均由@筱理_Rize先生经沟通及自行测试与活动经验得出。
+AVPStudio needs to thank [@冷小鸢aque](https://space.bilibili.com/27063907/) and [@讓晚風温暖各位的心](https://space.bilibili.com/122957742/) for the testing conclusions drawn in practice.
 
-AVPStudio需要致谢[@冷小鸢aque](https://space.bilibili.com/27063907/)和[@讓晚風温暖各位的心](https://space.bilibili.com/122957742/)在实践中得出的测试结论。
+For more acknowledgements, please refer to the software's ["About"](res/texts/aboutinfo_zh_CN.md) page.
 
-更多致谢信息，请参阅软件的[“关于”](res/texts/aboutinfo_zh_CN.md)页面。
+Dolby®、Dolby Cinema® are registered trademarks of Dolby Laboratories.
 
-杜比®、杜比影院®、Dolby®、Dolby Cinema®是杜比实验室国际有限公司的注册商标。
+Christie®、Christie Pandoras Box® are registered trademarks of Christie Digital.
 
-Christie®、Christie Pandoras Box®是科视数字系统有限公司的商标。
+All other trademarks are the property of their respective owners.
 
-所有其它商标皆为各自所有者的财产。
+AVPStudio is not related to Dolby Laboratories or Christie Digital Systems. The output of AVPStudio cannot represent the product quality of the aforementioned enterprises. AVPStudio is only designed for UGC content creation purposes and cannot be used for professional content distribution work. For professional content distribution needs, please contact Dolby Laboratories or Christie Digital.
 
-AVPStudio与杜比实验室、科视数字系统有限公司无关。AVPStudio的输出不能代表上述企业的产品质量。AVPStudio仅被设计用于UGC内容创作目的，而不可被用于专业内容发行工作。针对专业内容发行需求，请与杜比实验室或科视数字系统有限公司联系。
+According to GNU General Public License, terms 11 and 12, because the program is licensed free of charge, there is no warranty for the program, to the extent permitted by applicable law. Except when otherwise stated in writing the copyright holders and/or other parties provide the program "as is" without warranty of any kind, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the program is with you. Should the
+program prove defective, you assume the cost of all necessary servicing, repair or correction. In no event unless required by applicable law or agreed to in writing
+will any copyright holder, or any other party who may modify and/or redistribute the program as permitted above, be liable to you for damages, including any general, special, incidental or consequential damages arising out of the use or inability to use the program (including but not limited to loss of data or data being rendered inaccurate or losses sustained by you or third parties or a failure of the program to operate with any other programs), even if such holder or other party has been advised of the possibility of such damages.
 
-根据《GNU通用公共许可协议》第十一、十二条，本程序为免费授权，故在适用法律范围内不提供品质担保。除非另作书面声明，版权持有人及其他程序提供者“概”不提供任何显式或隐式的品质担保，品质担保所指包括而不仅限于有经济价值和适合特定用途的保证。全部风险，如程序的质量和性能问题，皆由你承担。若程序出现缺陷，你将承担所有必要的修复和更正服务的费用。除非适用法律或书面协议要求，任何版权持有人或本程序按本协议可能存在的第三方修改和再发布者，都不对你的损失负有责任，包括由于使用或者不能使用本程序造成的任何一般的、特殊的、偶发的或重大的损失（包括而不仅限于数据丢失、数据失真、你或第三方的后续损失、其他程序无法与本程序协同运作），即使那些人声称会对此负责。
+## Third-party Software and Open Source Licenses
 
-## 第三方软件与开放源代码许可
+AVPStudio uses Qt6 technology under the Qt license.
 
-AVPStudio基于Qt许可证使用Qt6技术。
+AVPStudio is based on LGPLv2.1 and GPLv2 using [FFmpeg](https://ffmpeg.org/)'s software.
 
-AVPStudio基于LGPLv2.1及GPLv2使用来自[FFmpeg](https://ffmpeg.org/)的软件。
+AVPStudio MXLPlayer uses zlib license from [SDL](https://www.libsdl.org/)'s software.
 
-AVPStudio MXLPlayer基于zlib license使用来自[SDL](https://www.libsdl.org/)的软件。
-
-AVPStudio是在[GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1)下开放源代码的软件。
+AVPStudio is an open-source software under [GNU GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1).
